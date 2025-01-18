@@ -1,6 +1,20 @@
-<mat-toolbar>
-  <a mat-fab routerLink="/"><mat-icon>home</mat-icon></a>
-  <a mat-raised-button routerLink="/stash">My stash</a>
-  <button mat-raised-button>Stash stats</button>
-  <button mat-raised-button>Stash settings</button>
+<mat-toolbar class="toolbar">
+  <div>
+    <span>
+      <a mat-button routerLink="/">Fabricadabra</a>
+    </span>
+    <span>
+      <a mat-button routerLink="/stash"><mat-icon>shelves</mat-icon>My stash</a>
+    </span>
+    <span>
+      <a mat-button routerLink="/stats"
+        ><mat-icon>equalizer</mat-icon>Stash stats</a
+      >
+    </span>
+  </div>
+  <div class="tb-right">
+    <span>
+      <a mat-button routerLink="/settings"><mat-icon>settings</mat-icon></a>
+    </span>
+  </div>
 </mat-toolbar>
