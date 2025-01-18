@@ -1,4 +1,5 @@
 export interface FabricModel {
+    id: string;
     fiber: string;
     material: string;
     pattern: string;
