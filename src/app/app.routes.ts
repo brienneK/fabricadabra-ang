@@ -3,6 +3,7 @@ import { StashComponent } from './components/stash/stash.component';
 import { HomeComponent } from './components/home/home.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { StatsComponent } from './components/stats/stats.component';
+import { AddFabricComponent } from './components/stash/add-fabric/add-fabric.component';
 
 export const routes: Routes = [
     {
@@ -11,7 +12,13 @@ export const routes: Routes = [
     },
     {
         path: 'stash',
-        component: StashComponent
+        component: StashComponent,
+        children: [
+            {
+                path: 'add-fabric',
+                component: AddFabricComponent
+            }
+        ] 
     },
     {
         path: 'stats',
