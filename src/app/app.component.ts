@@ -14,5 +14,5 @@ import { ToolbarComponent } from "./components/toolbar/toolbar.component";
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'fabricadabra-ang';
+  title = 'fabricadabra';
 }
