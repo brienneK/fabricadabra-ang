@@ -1,0 +1,38 @@
+export const DUMMY_STASH = [
+    {
+        id: 'f1',
+        fiber: 'cotton',
+        material: 'poplin',
+        pattern: 'floral',
+        color: 'white',
+        source: 'Mood Fabrics',
+        width: 54,
+        length: 3,
+        lengthType: 'yd.',
+        scrap: false,
+    },
+    {   
+        id: 'f2',
+        fiber: 'silk',
+        material: 'taffeta',
+        pattern: 'solid',
+        color: 'saphire',
+        source: 'Renaissance Fabrics',
+        width: 54,
+        length: 10,
+        lengthType: 'yd.',
+        scrap: false,
+    },
+    {
+        id: 'f3',
+        fiber: 'wool',
+        material: 'worsted',
+        pattern: 'solid',
+        color: 'light blue',
+        source: 'Burnley & Trowbridge',
+        width: 44,
+        length: 12,
+        lengthType: 'in.',
+        scrap: true,
+    }
+]
