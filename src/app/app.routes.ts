@@ -6,26 +6,24 @@ import { StatsComponent } from './components/stats/stats.component';
 import { AddFabricComponent } from './components/stash/add-fabric/add-fabric.component';
 
 export const routes: Routes = [
-    {
-        path: '',
-        component: HomeComponent
-    },
-    {
-        path: 'stash',
-        component: StashComponent,
-        children: [
-            {
-                path: 'add-fabric',
-                component: AddFabricComponent
-            }
-        ] 
-    },
-    {
-        path: 'stats',
-        component: StatsComponent
-    },
-    {
-        path: 'settings',
-        component: SettingsComponent
-    }
+  {
+    path: '',
+    component: HomeComponent,
+  },
+  {
+    path: 'stash',
+    component: StashComponent,
+  },
+  {
+    path: 'add-fabric',
+    component: AddFabricComponent,
+  },
+  {
+    path: 'stats',
+    component: StatsComponent,
+  },
+  {
+    path: 'settings',
+    component: SettingsComponent,
+  },
 ];
