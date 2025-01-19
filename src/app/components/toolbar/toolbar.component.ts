@@ -5,11 +5,10 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-toolbar',
-  standalone: true,
-  imports: [RouterLink, MatToolbarModule, MatButtonModule, MatIconModule],
-  templateUrl: './toolbar.component.html',
-  styleUrl: './toolbar.component.css'
+    selector: 'app-toolbar',
+    imports: [RouterLink, MatToolbarModule, MatButtonModule, MatIconModule],
+    templateUrl: './toolbar.component.html',
+    styleUrl: './toolbar.component.css'
 })
 export class ToolbarComponent {
 
