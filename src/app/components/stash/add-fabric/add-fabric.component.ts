@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-add-fabric',
   imports: [],
   templateUrl: './add-fabric.component.html',
-  styleUrl: './add-fabric.component.css',
+  styleUrl: './add-fabric.component.scss',
 })
 export class AddFabricComponent {
   constructor() {
