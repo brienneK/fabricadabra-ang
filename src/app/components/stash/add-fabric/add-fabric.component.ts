@@ -1,13 +1,10 @@
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-add-fabric',
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './add-fabric.component.html',
   styleUrl: './add-fabric.component.scss',
 })
-export class AddFabricComponent {
-  constructor() {
-    console.log("I'm here!");
-  }
-}
+export class AddFabricComponent {}
