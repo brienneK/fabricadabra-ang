@@ -10,6 +10,11 @@ export class Fabric {
   source: string;
   width: number;
   length: number;
-  lengthType: 'yd.' | 'in.';
   scrap: boolean;
+  public get yardage(): number {
+    return Math.floor(this.length / 36);
+  }
+  public get inches(): number {
+    return this.length % 36;
+  }
 }
