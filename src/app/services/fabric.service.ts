@@ -1,4 +1,4 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import {
   addDoc,
   collection,
@@ -19,6 +19,24 @@ export class FabricService {
   fs = inject(getFirestore);
 
   fabrics = signal<Fabric[]>([]);
+  fabricCount = computed(() => this.fabrics().length);
+  totalYards = computed(() =>
+    this.fabrics().length > 0
+      ? Math.floor(
+          this.fabrics().reduce(
+            (totalLength, fabric) => totalLength + fabric.length,
+            0
+          ) / 36
+        )
+      : 0
+  );
+  remainingInches = computed(
+    () =>
+      this.fabrics().reduce(
+        (totalLength, fabric) => totalLength + fabric.length,
+        0
+      ) % 36
+  );
 
   getFabrics(userId: string): void {
     const c = collection(this.fs, `users/${userId}/fabrics`);

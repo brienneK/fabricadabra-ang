@@ -58,9 +58,11 @@ export class UserService {
     if (docSnap.exists()) {
       return new User(docSnap.data());
     } else {
+      // @TODO Create a batch to handle new user creation.
       setDoc(docRef, {
         userName: '',
       });
+      // @TODO Add default options (fibers, materials, etc.) in other services.
       return null;
     }
   }
