@@ -30,16 +30,16 @@
       <input type="number" id="length" name="length" />
     </p>
     <p>
-      <label for="lengthType">Length Type</label>
-      <select id="lengthType" name="lengthType">
-        <option value="yd.">yd.</option>
-        <option value="in.">in.</option>
-      </select>
-    </p>
-    <p>
       <label for="scrap">Scrap</label>
       <input type="checkbox" id="scrap" name="scrap" />
     </p>
-    <button type="submit">Create</button>
+    <button
+      mat-raised-button
+      class="btn-secondary"
+      type="submit"
+      (click)="onSubmit()"
+    >
+      Create
+    </button>
   </form>
 </div>
