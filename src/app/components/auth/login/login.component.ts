@@ -2,7 +2,11 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserStore } from '@store/user.store';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  signInWithEmailAndPassword,
+} from 'firebase/auth';
 
 @Component({
   selector: 'app-login',
@@ -21,6 +25,13 @@ export class LoginComponent {
     password: [''],
   });
 
+  createAccountForm = this.fb.group({
+    displayName: [''],
+    email: [''],
+    password: [''],
+    confirmPassword: [''],
+  });
+
   async login() {
     const email = this.loginForm.value.email;
     const password = this.loginForm.value.password;
@@ -30,7 +41,34 @@ export class LoginComponent {
         this.router.navigateByUrl('/stash');
       })
       .catch((error) => {
-        console.error('Error signing in', error);
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.error(`Error signing in: ${errorCode} - ${errorMessage}`);
+      });
+  }
+
+  async createAccount() {
+    const email = this.createAccountForm.value.email;
+    const password = this.createAccountForm.value.password;
+    const confirmPassword = this.createAccountForm.value.confirmPassword;
+    const displayName = this.createAccountForm.value.displayName;
+    if (password.length < 8) {
+      alert('Password must be at least 8 characters');
+      return;
+    }
+    if (password !== confirmPassword) {
+      alert('Passwords do not match');
+      return;
+    }
+    console.log('Creating account with', email, password, displayName);
+    await createUserWithEmailAndPassword(this.auth, email, password)
+      .then(() => {
+        this.router.navigateByUrl('/stash');
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.error(`Error creating account: ${errorCode} - ${errorMessage}`);
       });
   }
 }
