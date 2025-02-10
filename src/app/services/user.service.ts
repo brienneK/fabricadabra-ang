@@ -1,4 +1,4 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { getAnalytics, logEvent } from 'firebase/analytics';
 import {
@@ -9,14 +9,13 @@ import {
 import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore';
 import { User } from '@models/user.model';
 import { FabricService } from './fabric.service';
+import { UserStore } from '@store/user.store';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  user = signal<User>(null);
-  isLoggedIn = computed(() => !!this.user());
-
+  userStore = inject(UserStore);
   fs = inject(getFirestore);
   auth = inject(getAuth);
   analytics = inject(getAnalytics);
@@ -35,13 +34,13 @@ export class UserService {
                   email: firebaseUser.email,
                   ...userData,
                 });
-                this.user.set(user);
+                this.userStore.setUser(user);
                 this.fabricService.getFabrics(user.id);
               }
             );
             return true;
           } else {
-            this.user.set(null);
+            this.userStore.clearUser();
             return false;
           }
         });
@@ -68,12 +67,10 @@ export class UserService {
   }
 
   async updateUser(changes: Partial<User>): Promise<void> {
-    const docRef = doc(this.fs, `users/${this.user().id}`);
+    const userId = this.userStore.user().id;
+    const docRef = doc(this.fs, `users/${userId}`);
     return await setDoc(docRef, changes, { merge: true }).then(() => {
-      this.user.update((u) => ({
-        ...u,
-        ...changes,
-      }));
+      this.userStore.updateUser(changes);
     });
   }
 

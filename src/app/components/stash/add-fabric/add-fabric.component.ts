@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { UserStore } from '@store/user.store';
 import { Fabric } from '@models/fabric.model';
 import { FabricService } from '@services/fabric.service';
 import { getAnalytics } from 'firebase/analytics';
@@ -17,6 +18,7 @@ export class AddFabricComponent {
   analytics = inject(getAnalytics);
   fb = inject(FormBuilder);
   fabricService = inject(FabricService);
+  userStore = inject(UserStore);
 
   addFabricForm = this.fb.group({
     fiber: [''],
@@ -45,7 +47,7 @@ export class AddFabricComponent {
       scrap: val.scrap,
     };
     this.fabricService
-      .addFabric('userId', fabric)
+      .addFabric(this.userStore.user().id, fabric)
       .then(() => {
         this.addFabricForm.enable();
         this.addFabricForm.reset();
