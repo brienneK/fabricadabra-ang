@@ -4,12 +4,18 @@ import { HomeComponent } from './components/home/home.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { StatsComponent } from './components/stats/stats.component';
 import { AddFabricComponent } from './components/stash/add-fabric/add-fabric.component';
+import { LoginComponent } from '@components/auth/login/login.component';
 
 export const routes: Routes = [
   {
     path: '',
     title: 'Home',
     component: HomeComponent,
+  },
+  {
+    path: 'login',
+    title: 'Login',
+    component: LoginComponent,
   },
   {
     path: 'stash',
