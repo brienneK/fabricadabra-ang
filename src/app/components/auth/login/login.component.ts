@@ -46,16 +46,27 @@ export class LoginComponent {
     return this.loginForm.controls;
   }
 
+  get ca() {
+    return this.createAccountForm.controls;
+  }
+
   loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required]],
+    password: ['', [Validators.required, Validators.minLength(8)]],
   });
 
   createAccountForm = this.fb.group({
     displayName: [''],
     email: ['', [Validators.required, Validators.email]],
-    password: [''],
-    confirmPassword: [''],
+    password: ['', [Validators.required, Validators.minLength(8)]],
+    confirmPassword: [
+      '',
+      [
+        Validators.required,
+        Validators.minLength(8),
+        // Validators.mustMatch(password),
+      ],
+    ],
   });
 
   async login() {
@@ -78,14 +89,6 @@ export class LoginComponent {
     const password = this.createAccountForm.value.password;
     const confirmPassword = this.createAccountForm.value.confirmPassword;
     const displayName = this.createAccountForm.value.displayName;
-    if (password.length < 8) {
-      alert('Password must be at least 8 characters');
-      return;
-    }
-    if (password !== confirmPassword) {
-      alert('Passwords do not match');
-      return;
-    }
     console.log('Creating account with', email, password, displayName);
     await createUserWithEmailAndPassword(this.auth, email, password)
       .then(() => {
