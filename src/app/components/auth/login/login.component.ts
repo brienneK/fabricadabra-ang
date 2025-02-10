@@ -1,6 +1,17 @@
 import { Component, inject } from '@angular/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatOptionModule } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTabsModule } from '@angular/material/tabs';
 import { Router } from '@angular/router';
 import { UserStore } from '@store/user.store';
 import {
@@ -11,7 +22,17 @@ import {
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule, ReactiveFormsModule, MatButtonModule],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatOptionModule,
+    MatSelectModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTabsModule,
+  ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
@@ -21,14 +42,18 @@ export class LoginComponent {
   router = inject(Router);
   fb = inject(FormBuilder);
 
+  get l() {
+    return this.loginForm.controls;
+  }
+
   loginForm = this.fb.group({
-    email: [''],
-    password: [''],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required]],
   });
 
   createAccountForm = this.fb.group({
     displayName: [''],
-    email: [''],
+    email: ['', [Validators.required, Validators.email]],
     password: [''],
     confirmPassword: [''],
   });
