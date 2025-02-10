@@ -8,22 +8,27 @@ import { AddFabricComponent } from './components/stash/add-fabric/add-fabric.com
 export const routes: Routes = [
   {
     path: '',
+    title: 'Home',
     component: HomeComponent,
   },
   {
     path: 'stash',
+    title: 'Stash',
     component: StashComponent,
   },
   {
     path: 'add-fabric',
+    title: 'Add Fabric',
     component: AddFabricComponent,
   },
   {
     path: 'stats',
+    title: 'Stats',
     component: StatsComponent,
   },
   {
     path: 'settings',
+    title: 'Settings',
     component: SettingsComponent,
   },
 ];
