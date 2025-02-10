@@ -11,32 +11,14 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import { Fabric } from '../models/fabric.model';
+import { StashStore } from '@store/stash.store';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FabricService {
   fs = inject(getFirestore);
-
-  fabrics = signal<Fabric[]>([]);
-  fabricCount = computed(() => this.fabrics().length);
-  totalYards = computed(() =>
-    this.fabrics().length > 0
-      ? Math.floor(
-          this.fabrics().reduce(
-            (totalLength, fabric) => totalLength + fabric.length,
-            0
-          ) / 36
-        )
-      : 0
-  );
-  remainingInches = computed(
-    () =>
-      this.fabrics().reduce(
-        (totalLength, fabric) => totalLength + fabric.length,
-        0
-      ) % 36
-  );
+  stashStore = inject(StashStore);
 
   getFabrics(userId: string): void {
     const c = collection(this.fs, `users/${userId}/fabrics`);
@@ -47,7 +29,7 @@ export class FabricService {
           (doc) => new Fabric({ id: doc.id, ...doc.data() })
         ),
       ];
-      this.fabrics.set(fabrics);
+      this.stashStore.setStash(fabrics);
     });
   }
 

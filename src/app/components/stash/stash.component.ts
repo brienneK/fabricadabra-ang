@@ -3,6 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { Fabric } from '@models/fabric.model';
 import { FabricService } from '@services/fabric.service';
+import { StashStore } from '@store/stash.store';
 
 @Component({
   selector: 'app-stash',
@@ -12,8 +13,9 @@ import { FabricService } from '@services/fabric.service';
 })
 export class StashComponent {
   fabricService = inject(FabricService);
+  stashStore = inject(StashStore);
 
-  fabrics: Signal<Fabric[]> = this.fabricService.fabrics;
+  fabrics: Signal<Fabric[]> = this.stashStore.stash;
 
   // This is a computed property that filters the fabrics by the selected fiber.
   filteredFabrics = computed(() => {});
