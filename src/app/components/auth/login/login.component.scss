@@ -1,0 +1,31 @@
+.column {
+    display: block;
+    float: left;
+    width: 50%;
+}
+.title-container {
+    margin-top: 25%
+}
+.title-container, .form-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#login::after {
+    content: "";
+    background-color: #000;
+    position: absolute;
+    width: 5px;
+    height: 50%;
+    top: 20%;
+    left: 50%;
+}
+
+label, input {
+    margin: 5px;
+}
+
+button {
+    margin: 10px;
+}
