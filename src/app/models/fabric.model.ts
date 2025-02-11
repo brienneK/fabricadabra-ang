@@ -7,9 +7,9 @@ export class Fabric {
   material: string;
   pattern: string;
   color: string;
-  source: string;
   width: number;
   length: number;
+  source: string;
   scrap: boolean;
   public get yardage(): number {
     return Math.floor(this.length / 36);

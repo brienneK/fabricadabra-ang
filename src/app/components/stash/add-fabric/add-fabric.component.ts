@@ -1,15 +1,38 @@
 import { Component, inject } from '@angular/core';
-import { FormBuilder, FormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { UserStore } from '@store/user.store';
 import { Fabric } from '@models/fabric.model';
 import { FabricService } from '@services/fabric.service';
 import { getAnalytics } from 'firebase/analytics';
 import { getStorage } from 'firebase/storage';
+import { MatOptionModule } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-add-fabric',
-  imports: [FormsModule, MatButtonModule],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatOptionModule,
+    MatSelectModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTabsModule,
+    MatCheckboxModule,
+  ],
   templateUrl: './add-fabric.component.html',
   styleUrl: './add-fabric.component.scss',
 })
@@ -20,18 +43,20 @@ export class AddFabricComponent {
   fabricService = inject(FabricService);
   userStore = inject(UserStore);
 
+  get f() {
+    return this.addFabricForm.controls;
+  }
+
   addFabricForm = this.fb.group({
-    fiber: [''],
-    material: [''],
-    pattern: [''],
-    color: [''],
+    fiber: ['', [Validators.required]],
+    material: ['', [Validators.required]],
+    pattern: ['', [Validators.required]],
+    color: ['', [Validators.required]],
+    width: [0, [Validators.required]],
+    length: [0, [Validators.required]],
     source: [''],
-    width: [0],
-    length: [0],
     scrap: [false],
   });
-
-  constructor() {}
 
   onSubmit() {
     this.addFabricForm.disable();
@@ -41,9 +66,9 @@ export class AddFabricComponent {
       material: val.material,
       pattern: val.pattern,
       color: val.color,
-      source: val.source,
       width: val.width,
       length: val.length,
+      source: val.source,
       scrap: val.scrap,
     };
     this.fabricService

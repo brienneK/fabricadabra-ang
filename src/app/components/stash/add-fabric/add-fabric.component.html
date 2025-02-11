@@ -1,38 +1,61 @@
 <div>
   <h2>Add fabric</h2>
-  <form>
-    <p>
-      <label for="fiber">Fiber</label>
-      <input type="text" id="fiber" name="fiber" />
-    </p>
-    <p>
-      <label for="material">Material</label>
-      <input type="text" id="material" name="material" />
-    </p>
-    <p>
-      <label for="pattern">Pattern</label>
-      <input type="text" id="pattern" name="pattern" />
-    </p>
-    <p>
-      <label for="color">Color</label>
-      <input type="text" id="color" name="color" />
-    </p>
-    <p>
-      <label for="source">Source</label>
-      <input type="text" id="source" name="source" />
-    </p>
-    <p>
-      <label for="width">Width (in.)</label>
-      <input type="number" id="width" name="width" />
-    </p>
-    <p>
-      <label for="length">Length</label>
-      <input type="number" id="length" name="length" />
-    </p>
-    <p>
-      <label for="scrap">Scrap</label>
-      <input type="checkbox" id="scrap" name="scrap" />
-    </p>
+  <form [formGroup]="addFabricForm" (submit)="onSubmit()">
+    <div>
+      <mat-form-field>
+        <mat-label>Fiber</mat-label>
+        <input matInput type="text" formControlName="fiber" />
+        @if (f.fiber?.errors?.required) {
+        <mat-error>Fiber is required.</mat-error>
+        }
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Material</mat-label>
+        <input matInput type="text" formControlName="material" />
+        @if (f.material?.errors?.required) {
+        <mat-error>Material is required.</mat-error>
+        }
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field>
+        <mat-label>Pattern</mat-label>
+        <input matInput type="text" formControlName="pattern" />
+        @if (f.pattern?.errors?.required) {
+        <mat-error>Pattern is required.</mat-error>
+        }
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Color</mat-label>
+        <input matInput type="text" formControlName="color" />
+        @if (f.color?.errors?.required) {
+        <mat-error>Color is required.</mat-error>
+        }
+      </mat-form-field>
+    </div>
+    <div>
+      <div>
+        <mat-form-field>
+          <mat-label>Width (in.)</mat-label>
+          <input matInput type="number" formControlName="width" />
+          @if (f.width?.errors?.required) {
+          <mat-error>Width is required.</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Length</mat-label>
+          <input matInput type="number" formControlName="length" />
+          @if (f.length?.errors?.required) {
+          <mat-error>Length is required.</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <mat-form-field>
+        <mat-label>Source</mat-label>
+        <input matInput type="text" formControlName="source" />
+      </mat-form-field>
+      <mat-checkbox type="checkbox" formControlName="scrap">Scrap</mat-checkbox>
+    </div>
     <button
       mat-raised-button
       class="btn-secondary"
