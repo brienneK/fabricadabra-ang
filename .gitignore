@@ -29,6 +29,7 @@ yarn-error.log
 .history/*
 
 # Miscellaneous
+notes.md
 /.angular/cache
 .sass-cache/
 /connect.lock
@@ -49,3 +50,4 @@ ui-debug.log
 seed-data
 seed-data.ts
 .firebase/hosting.*
+
