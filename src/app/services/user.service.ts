@@ -56,14 +56,10 @@ export class UserService {
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       return new User(docSnap.data());
-    } else {
-      // @TODO Create a batch to handle new user creation.
-      setDoc(docRef, {
-        userName: '',
-      });
-      // @TODO Add default options (fibers, materials, etc.) in other services.
-      return null;
     }
+    // @TODO Create a batch to handle new user creation.
+    // @TODO Add default options (fibers, materials, etc.) in other services.
+    return null;
   }
 
   async updateUser(changes: Partial<User>): Promise<void> {
