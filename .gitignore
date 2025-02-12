@@ -41,3 +41,11 @@ testem.log
 .DS_Store
 Thumbs.db
 src/app/firebase.config.ts
+
+# Firestore emulators
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+seed-data
+seed-data.ts
+.firebase/hosting.*
