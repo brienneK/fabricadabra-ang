@@ -56,6 +56,7 @@ export class RegisterFormComponent {
 
   registerForm = this.fb.group(
     {
+      displayName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required],
@@ -90,7 +91,7 @@ export class RegisterFormComponent {
     } else {
       await createUserWithEmailAndPassword(this.auth, email, password)
         .then(() => {
-          this.router.navigateByUrl('/groups');
+          this.router.navigateByUrl('/stash');
         })
         .catch((error) => {
           this.snackbar.open(error.message, 'Close');

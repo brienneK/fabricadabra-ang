@@ -2,6 +2,13 @@
   <h2>Create Account</h2>
   <form [formGroup]="registerForm" class="register-form" (submit)="register()">
     <mat-form-field>
+      <mat-label>Display name</mat-label>
+      <input matInput formControlName="displayName" />
+      @if (r.displayName?.errors?.required) {
+      <mat-error>Display name is required.</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field>
       <mat-label>Email</mat-label>
       <input matInput formControlName="email" />
       @if (r.email?.errors?.required) {
