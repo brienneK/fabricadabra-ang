@@ -52,22 +52,15 @@ export class LoginFormComponent {
     const email = this.loginForm.value.email;
     const password = this.loginForm.value.password;
     // this.loading.loadingOn();
-    const signInMethods = await fetchSignInMethodsForEmail(this.auth, email);
-    if (signInMethods.length === 1) {
-      // this.loading.loadingOff();
-      this.snackbar.open('Please sign in with Google', 'Close');
-      return;
-    } else {
-      await signInWithEmailAndPassword(this.auth, email, password)
-        .then(() => {
-          this.router.navigateByUrl('/stash');
-        })
-        .catch((error) => {
-          this.snackbar.open(error.message, 'Close');
-        })
-        .finally(() => {
-          // this.loading.loadingOff();
-        });
-    }
+    await signInWithEmailAndPassword(this.auth, email, password)
+      .then(() => {
+        this.router.navigateByUrl('/stash');
+      })
+      .catch((error) => {
+        this.snackbar.open(error.message, 'Close');
+      })
+      .finally(() => {
+        // this.loading.loadingOff();
+      });
   }
 }
