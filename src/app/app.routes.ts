@@ -5,6 +5,10 @@ import { SettingsComponent } from './components/settings/settings.component';
 import { StatsComponent } from './components/stats/stats.component';
 import { AddFabricComponent } from './components/stash/add-fabric/add-fabric.component';
 import { LoginComponent } from '@components/auth/login/login.component';
+import { LoginFormComponent } from '@components/auth/login/login-form/login-form.component';
+import { ForgotPasswordComponent } from '@components/auth/login/forgot-password/forgot-password.component';
+import { RegisterFormComponent } from '@components/auth/login/register-form/register-form.component';
+import { ResetPasswordComponent } from '@components/auth/login/reset-password/reset-password.component';
 
 export const routes: Routes = [
   {
@@ -16,6 +20,20 @@ export const routes: Routes = [
     path: 'login',
     title: 'Login',
     component: LoginComponent,
+    children: [
+      { path: '', title: 'Login', component: LoginFormComponent },
+      { path: 'register', title: 'Register', component: RegisterFormComponent },
+      {
+        path: 'forgot-password',
+        title: 'Forgot Password',
+        component: ForgotPasswordComponent,
+      },
+      {
+        path: 'reset-password',
+        title: 'Reset Password',
+        component: ResetPasswordComponent,
+      },
+    ],
   },
   {
     path: 'stash',
