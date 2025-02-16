@@ -9,6 +9,7 @@ import { LoginFormComponent } from '@components/auth/login/login-form/login-form
 import { ForgotPasswordComponent } from '@components/auth/login/forgot-password/forgot-password.component';
 import { RegisterFormComponent } from '@components/auth/login/register-form/register-form.component';
 import { ResetPasswordComponent } from '@components/auth/login/reset-password/reset-password.component';
+import { AccountComponent } from '@components/auth/account/account.component';
 
 export const routes: Routes = [
   {
@@ -34,6 +35,11 @@ export const routes: Routes = [
         component: ResetPasswordComponent,
       },
     ],
+  },
+  {
+    path: 'account',
+    title: 'Account',
+    component: AccountComponent,
   },
   {
     path: 'stash',
