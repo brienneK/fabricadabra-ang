@@ -1,9 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, inject, Signal } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { RouterLink } from '@angular/router';
+import { UserStore } from '@store/user.store';
 
 @Component({
   selector: 'app-home',
-  imports: [],
+  imports: [RouterLink, MatIconModule, MatButtonModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
-export class HomeComponent {}
+export class HomeComponent {
+  protected readonly userStore = inject(UserStore);
+  isLoggedIn: Signal<boolean> = this.userStore.isLoggedIn;
+}

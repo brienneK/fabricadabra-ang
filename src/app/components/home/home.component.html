@@ -1,8 +1,20 @@
 <header>
   <h1>Welcome to Fabricadabra</h1>
-  <p>A magical place to keep a sewist's stash organized</p>
-  <!-- <img
-    src="../../assets/images/fabricadabra.png"
-    alt="bolt of fabric with stars around it"
-  /> -->
+  <p>
+    Fabricadabra is a magical place to keep a sewist's stash organized. You can
+    keep track of your fabric, patterns, and notions. You can also keep track of
+    your projects and the fabric, patterns, and notions you used in them.
+  </p>
 </header>
+<div>
+  @if (!isLoggedIn()) {
+  <a
+    mat-raised-button
+    class="btn-primary mb-4"
+    type="button"
+    routerLink="/login"
+  >
+    Login or sign up now for a free account
+  </a>
+  }
+</div>
