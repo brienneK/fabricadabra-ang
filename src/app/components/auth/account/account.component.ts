@@ -21,6 +21,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
+import { User } from '@models/user.model';
 import { UserService } from '@services/user.service';
 import { UserStore } from '@store/user.store';
 import { getAnalytics, logEvent } from 'firebase/analytics';
@@ -53,7 +54,7 @@ export class AccountComponent {
   // protected readonly loading = inject(LoadingService);
   protected readonly snackBar = inject(MatSnackBar);
 
-  #user: Signal<firebase.User> = this.userStore.user;
+  #user: Signal<User> = this.userStore.user;
 
   firebaseUser = signal<firebase.User>(this.auth.currentUser);
   prod = signal<boolean>(environment.production);
