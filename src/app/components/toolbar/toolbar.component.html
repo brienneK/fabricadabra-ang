@@ -1,29 +1,41 @@
 <mat-toolbar>
-  <div class="links">
-    <span>
-      <a mat-button routerLink="/">Fabricadabra</a>
-    </span>
-    <span>
-      <a mat-button routerLink="/stash"><mat-icon>shelves</mat-icon>My stash</a>
-    </span>
-    <span>
-      <a mat-button routerLink="/stats"
-        ><mat-icon>equalizer</mat-icon>Stash stats</a
-      >
-    </span>
-    <span>
-      <a mat-button routerLink="/settings"><mat-icon>settings</mat-icon></a>
-    </span>
-    <span>
-      <a mat-button routerLink="/account"
-        ><mat-icon>account_circle</mat-icon></a
-      >
-    </span>
-    <!-- <span class="material-symbols-outlined">
-      <a mat-button routerLink="/login"><mat-icon>login</mat-icon>Login</a>
-    </span> -->
-    <span>
-      <a mat-button (click)="logout()"><mat-icon>logout</mat-icon>Logout</a>
-    </span>
-  </div>
+  <mat-toolbar-row>
+    <span id="title">Fabricadabra</span>
+    @if (isLoggedIn()) {
+    <div class="links">
+      <span>
+        <a mat-button routerLink="/">Fabricadabra</a>
+      </span>
+      <span>
+        <a mat-button routerLink="/stash"
+          ><mat-icon>shelves</mat-icon>My stash</a
+        >
+      </span>
+      <span>
+        <a mat-button routerLink="/stats"
+          ><mat-icon>equalizer</mat-icon>Stash stats</a
+        >
+      </span>
+    </div>
+    <div class="account-links">
+      <span>
+        <a mat-button routerLink="/settings"><mat-icon>settings</mat-icon></a>
+      </span>
+      <span>
+        <a mat-button routerLink="/account"
+          ><mat-icon>account_circle</mat-icon></a
+        >
+      </span>
+      <span>
+        <a mat-button (click)="logout()"><mat-icon>logout</mat-icon>Logout</a>
+      </span>
+    </div>
+    } @else {
+    <div class="account-links">
+      <span class="material-symbols-outlined">
+        <a mat-button routerLink="/login"><mat-icon>login</mat-icon>Login</a>
+      </span>
+    </div>
+    }
+  </mat-toolbar-row>
 </mat-toolbar>
