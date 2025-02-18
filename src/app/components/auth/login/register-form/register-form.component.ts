@@ -25,7 +25,7 @@ import {
   fetchSignInMethodsForEmail,
   getAuth,
 } from 'firebase/auth';
-import { getFunctions, httpsCallable } from 'firebase/functions';
+import { getFunctions } from 'firebase/functions';
 // import { passwordMatchValidator } from '../password-match-validator';
 
 @Component({
@@ -77,6 +77,7 @@ export class RegisterFormComponent {
   }
 
   async register() {
+    const displayName = this.registerForm.value.displayName;
     const email = this.registerForm.value.email;
     const password = this.registerForm.value.password;
     // this.loading.loadingOn();
