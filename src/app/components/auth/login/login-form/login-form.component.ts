@@ -12,11 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router, RouterModule } from '@angular/router';
 // import { LoadingService } from '@shared/loading/loading.service';
-import {
-  fetchSignInMethodsForEmail,
-  getAuth,
-  signInWithEmailAndPassword,
-} from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
 @Component({
   selector: 'app-login-form',
