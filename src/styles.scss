@@ -132,3 +132,7 @@ a:hover {
     padding: 16px 0;
   }
 }
+
+.primary-link {
+  color: mat.get-theme-color(theme.$light-theme, primary, 50) !important;
+}
