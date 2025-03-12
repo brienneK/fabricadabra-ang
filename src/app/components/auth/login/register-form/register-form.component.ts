@@ -57,6 +57,7 @@ export class RegisterFormComponent {
   registerForm = this.fb.group(
     {
       displayName: ['', Validators.required],
+      // Validators.email gives the error before a domain is entered or after the period but before the domain extension (i.e. test@ or test@test.) but not when the entered value is test@test
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required],
