@@ -136,3 +136,23 @@ a:hover {
 .primary-link {
   color: mat.get-theme-color(theme.$light-theme, primary, 50) !important;
 }
+
+table thead tr,
+tfoot tr {
+  background-color: mat.get-theme-color(theme.$light-theme, primary, 70) !important;
+  color: mat.get-theme-color(theme.$light-theme, primary, 0) !important;
+}
+
+// table th {
+//   font-weight: bold !important;
+// }
+
+.scrollable-table {
+  border: 2px solid;
+}
+
+.table-container {
+    margin-top: 8px;
+    display: grid;
+    justify-content: center;
+}

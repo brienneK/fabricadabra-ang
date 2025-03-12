@@ -1,0 +1,43 @@
+.filters {
+    display: grid;
+    gap: 8px;
+    align-items: baseline;
+    justify-items: center;
+    grid-template-rows: auto;
+    grid-template-columns: max-content max-content;
+  }
+  
+  @media (max-width: 473px) {
+    .filters {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  @media (min-width: 474px) {
+    .add-button {
+      grid-column-start: 1;
+      grid-column-end: span 2;
+    }
+}
+
+.stash-header {
+    display: grid;
+    grid-template-columns: 250px 250px;
+    column-gap: 100px;
+    padding-top: 40px;
+    padding-bottom: 10px;
+    justify-content: center;
+    
+    h1 {
+        font-size: 2em;
+        font-weight: bold;
+        color: black;
+        justify-items: left;
+    }
+
+    a {
+        justify-self: right;
+    }
+}
+  
+  
