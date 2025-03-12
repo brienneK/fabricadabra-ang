@@ -13,6 +13,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
+import { LoadingService } from '@app/loading/loading.service';
 import { Fabric } from '@models/fabric.model';
 import { FabricService } from '@services/fabric.service';
 import { SortingService } from '@services/sorting.service';
@@ -43,61 +44,64 @@ export class StashComponent {
   storage = inject(getStorage);
   fabricService = inject(FabricService);
   sorter = inject(SortingService);
+  loading = inject(LoadingService);
   stashStore = inject(StashStore);
   userStore = inject(UserStore);
   breakpointObserver = inject(BreakpointObserver);
-
   fabrics: Signal<Fabric[]> = this.stashStore.stash;
 
   sortField = signal<string>('fiber');
   sortAsc = signal<boolean>(true);
-  columnsToDisplay = signal<string[]>([]);
+  // columnsToDisplay = signal<string[]>([]);
+
+  displayedColumns: string[] = [
+    'fiber',
+    'material',
+    'pattern',
+    'color',
+    'length',
+    'width',
+    'source',
+    'scrap',
+  ];
   smallScreen = signal<boolean>(false);
 
-  // This is a computed property that filters the fabrics by the selected fiber.
   filteredFabrics = computed(() => {
-    var filteredFabrics = this.fabrics().filter((fabric: Fabric) => {
+    console.log('Computing filtered fabrics');
+    return this.fabrics().filter((fabric) => {
+      console.log('Filtering fabric:', fabric);
       return fabric.length > 0;
     });
-    if (filteredFabrics.length > 0) {
-      filteredFabrics = this.sorter.sort(
-        filteredFabrics,
-        this.sortField(),
-        this.sortAsc()
-      );
-    }
-    return filteredFabrics;
   });
-
-  ngOnInit(): void {
-    this.breakpointObserver
-      .observe('(max-width: 1009px)')
-      .subscribe((result) => {
-        if (result.matches) {
-          this.columnsToDisplay.set([
-            'fiber',
-            'material',
-            'pattern',
-            'color',
-            'width',
-            'length',
-          ]);
-          this.smallScreen.set(true);
-        } else {
-          this.columnsToDisplay.set([
-            'fiber',
-            'material',
-            'pattern',
-            'color',
-            'width',
-            'length',
-            'source',
-            'scrap',
-          ]);
-          this.smallScreen.set(false);
-        }
-      });
-  }
+  // ngOnInit(): void {
+  //   this.breakpointObserver
+  //     .observe('(max-width: 1009px)')
+  //     .subscribe((result) => {
+  //       if (result.matches) {
+  //         this.columnsToDisplay.set([
+  //           'fiber',
+  //           'material',
+  //           'pattern',
+  //           'color',
+  //           'width',
+  //           'length',
+  //         ]);
+  //         this.smallScreen.set(true);
+  //       } else {
+  //         this.columnsToDisplay.set([
+  //           'fiber',
+  //           'material',
+  //           'pattern',
+  //           'color',
+  //           'width',
+  //           'length',
+  //           'source',
+  //           'scrap',
+  //         ]);
+  //         this.smallScreen.set(false);
+  //       }
+  //     });
+  // }
 
   sortFabrics(e: { active: string; direction: string }): void {
     this.sortField.set(e.active);
