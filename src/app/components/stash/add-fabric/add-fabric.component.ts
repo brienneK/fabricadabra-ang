@@ -57,8 +57,9 @@ export class AddFabricComponent {
     color: ['', [Validators.required]],
     width: [0, [Validators.required]],
     length: [0, [Validators.required]],
-    source: [''],
     scrap: [false],
+    source: [''],
+    price: [0],
   });
 
   onSubmit(submitAndAddAnother: boolean = false) {
@@ -71,8 +72,9 @@ export class AddFabricComponent {
       color: val.color,
       width: val.width,
       length: val.length,
-      source: val.source,
       scrap: val.scrap,
+      source: val.source,
+      price: val.price,
     };
     this.fabricService
       .addFabric(this.userStore.user().id, fabric)
