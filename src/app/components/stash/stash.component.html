@@ -41,7 +41,9 @@
         </ng-container>
         <ng-container matColumnDef="scrap">
           <th mat-header-cell *matHeaderCellDef>Scrap</th>
-          <td mat-cell *matCellDef="let fabric">{{ fabric.scrap }}</td>
+          <td mat-cell *matCellDef="let fabric">
+            {{ fabric.scrap | checkmark }}
+          </td>
         </ng-container>
         <ng-container matColumnDef="source">
           <th mat-header-cell *matHeaderCellDef>Source</th>
