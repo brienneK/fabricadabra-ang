@@ -52,18 +52,7 @@ export class StashComponent {
 
   sortField = signal<string>('fiber');
   sortAsc = signal<boolean>(true);
-  // columnsToDisplay = signal<string[]>([]);
-
-  displayedColumns: string[] = [
-    'fiber',
-    'material',
-    'pattern',
-    'color',
-    'length',
-    'width',
-    'source',
-    'scrap',
-  ];
+  columnsToDisplay = signal<string[]>([]);
   smallScreen = signal<boolean>(false);
 
   filteredFabrics = computed(() => {
@@ -73,35 +62,35 @@ export class StashComponent {
       return fabric.length > 0;
     });
   });
-  // ngOnInit(): void {
-  //   this.breakpointObserver
-  //     .observe('(max-width: 1009px)')
-  //     .subscribe((result) => {
-  //       if (result.matches) {
-  //         this.columnsToDisplay.set([
-  //           'fiber',
-  //           'material',
-  //           'pattern',
-  //           'color',
-  //           'width',
-  //           'length',
-  //         ]);
-  //         this.smallScreen.set(true);
-  //       } else {
-  //         this.columnsToDisplay.set([
-  //           'fiber',
-  //           'material',
-  //           'pattern',
-  //           'color',
-  //           'width',
-  //           'length',
-  //           'source',
-  //           'scrap',
-  //         ]);
-  //         this.smallScreen.set(false);
-  //       }
-  //     });
-  // }
+  ngOnInit(): void {
+    this.breakpointObserver
+      .observe('(max-width: 1009px)')
+      .subscribe((result) => {
+        if (result.matches) {
+          this.columnsToDisplay.set([
+            'fiber',
+            'material',
+            'pattern',
+            'color',
+            'width',
+            'length',
+          ]);
+          this.smallScreen.set(true);
+        } else {
+          this.columnsToDisplay.set([
+            'fiber',
+            'material',
+            'pattern',
+            'color',
+            'width',
+            'length',
+            'source',
+            'scrap',
+          ]);
+          this.smallScreen.set(false);
+        }
+      });
+  }
 
   sortFabrics(e: { active: string; direction: string }): void {
     this.sortField.set(e.active);
