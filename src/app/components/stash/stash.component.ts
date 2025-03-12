@@ -13,13 +13,14 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
-import { LoadingService } from '@app/loading/loading.service';
+import { LoadingService } from '@shared/loading/loading.service';
 import { Fabric } from '@models/fabric.model';
 import { FabricService } from '@services/fabric.service';
 import { SortingService } from '@services/sorting.service';
 import { StashStore } from '@store/stash.store';
 import { UserStore } from '@store/user.store';
 import { getStorage } from 'firebase/storage';
+import { CheckmarkPipe } from '@shared/pipes/checkmark.pipe';
 
 @Component({
   selector: 'app-stash',
@@ -36,6 +37,7 @@ import { getStorage } from 'firebase/storage';
     MatSlideToggleModule,
     MatInputModule,
     RouterLink,
+    CheckmarkPipe,
   ],
   templateUrl: './stash.component.html',
   styleUrl: './stash.component.scss',
