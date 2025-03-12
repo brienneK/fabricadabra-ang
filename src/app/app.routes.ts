@@ -10,6 +10,7 @@ import { ForgotPasswordComponent } from '@components/auth/login/forgot-password/
 import { RegisterFormComponent } from '@components/auth/login/register-form/register-form.component';
 import { ResetPasswordComponent } from '@components/auth/login/reset-password/reset-password.component';
 import { AccountComponent } from '@components/auth/account/account.component';
+import { authGuard, loggedInGuard } from '@components/auth/guards.guard';
 
 export const routes: Routes = [
   {
@@ -21,6 +22,7 @@ export const routes: Routes = [
     path: 'login',
     title: 'Login',
     component: LoginComponent,
+    canActivate: [loggedInGuard],
     children: [
       { path: '', title: 'Login', component: LoginFormComponent },
       { path: 'register', title: 'Register', component: RegisterFormComponent },
@@ -40,25 +42,30 @@ export const routes: Routes = [
     path: 'account',
     title: 'Account',
     component: AccountComponent,
+    canActivate: [authGuard],
   },
   {
     path: 'stash',
     title: 'Stash',
     component: StashComponent,
+    canActivate: [authGuard],
   },
   {
     path: 'add-fabric',
     title: 'Add Fabric',
     component: AddFabricComponent,
+    canActivate: [authGuard],
   },
   {
     path: 'stats',
     title: 'Stats',
     component: StatsComponent,
+    canActivate: [authGuard],
   },
   {
     path: 'settings',
     title: 'Settings',
     component: SettingsComponent,
+    canActivate: [authGuard],
   },
 ];

@@ -18,10 +18,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-add-fabric',
   imports: [
+    RouterModule,
     FormsModule,
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -42,6 +44,7 @@ export class AddFabricComponent {
   fb = inject(FormBuilder);
   fabricService = inject(FabricService);
   userStore = inject(UserStore);
+  protected readonly router = inject(Router);
 
   get f() {
     return this.addFabricForm.controls;
@@ -58,7 +61,7 @@ export class AddFabricComponent {
     scrap: [false],
   });
 
-  onSubmit() {
+  onSubmit(submitAndAddAnother: boolean = false) {
     this.addFabricForm.disable();
     const val = this.addFabricForm.value;
     const fabric: Partial<Fabric> = {
@@ -76,9 +79,18 @@ export class AddFabricComponent {
       .then(() => {
         this.addFabricForm.enable();
         this.addFabricForm.reset();
+        if (submitAndAddAnother) {
+          this.router.navigateByUrl('/add-fabric');
+        } else {
+          this.router.navigateByUrl('/stash');
+        }
       })
       .catch((err) => {
         console.log(err);
       });
+  }
+
+  onCancel() {
+    this.router.navigateByUrl('/stash');
   }
 }
