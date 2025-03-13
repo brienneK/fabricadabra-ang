@@ -64,11 +64,25 @@ a:hover {
     'opsz' 24;
 }
 
+button {
+  margin: 10px;
+}
+
+.btn-delete:not([disabled]) {
+  background-color: mat.get-theme-color(theme.$light-theme, neutral, 0) !important;
+  color: mat.get-theme-color(theme.$light-theme, neutral, 100) !important;
+}
+
+.btn-cancel:not([disabled]) {
+  background-color: mat.get-theme-color(theme.$light-theme, neutral, 80) !important;
+  color: mat.get-theme-color(theme.$light-theme, neutral, 0) !important;
+}
+
 .btn-primary:not([disabled]) {
   background-color: mat.get-theme-color(
     theme.$light-theme,
     primary,
-    40
+    35
   ) !important;
   color: mat.get-theme-color(theme.$light-theme, primary, 100) !important;
 }
@@ -79,7 +93,7 @@ a:hover {
     secondary,
     80
   ) !important;
-  color: mat.get-theme-color(theme.$light-theme, secondary, 20) !important;
+  color: mat.get-theme-color(theme.$light-theme, secondary, 0) !important;
 }
 
 .btn-tertiary:not([disabled]) {
@@ -157,3 +171,4 @@ tfoot tr {
   background-color: mat.get-theme-color(theme.$light-theme, secondary, 70) !important;
   cursor: pointer;
 }
+
