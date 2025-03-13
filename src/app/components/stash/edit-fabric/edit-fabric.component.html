@@ -55,23 +55,34 @@
         </mat-form-field>
       </div>
       <mat-checkbox type="checkbox" formControlName="scrap">Scrap</mat-checkbox>
-      <button
-        mat-stroked-button
-        class="btn-tertiary"
-        type="button"
-        (click)="onCancel()"
-      >
-        Cancel
-      </button>
-      <button
-        mat-raised-button
-        class="btn-secondary"
-        type="submit"
-        defaultButton
-        (click)="onSubmit()"
-      >
-        Save
-      </button>
+      <div class="btns">
+        <button
+          mat-raised-button
+          class="btn-primary"
+          type="submit"
+          defaultButton
+          (click)="onSubmit()"
+        >
+          Save
+        </button>
+        <button
+          mat-stroked-button
+          class="btn-secondary"
+          type="button"
+          (click)="onCancel()"
+        >
+          Cancel
+        </button>
+        <button
+          mat-raised-button
+          class="btn-tertiary"
+          type="submit"
+          defaultButton
+          (click)="onDelete()"
+        >
+          Delete
+        </button>
+      </div>
     </form>
   </div>
 </div>

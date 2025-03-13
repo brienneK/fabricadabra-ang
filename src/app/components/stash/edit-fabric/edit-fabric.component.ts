@@ -112,4 +112,17 @@ export class EditFabricComponent {
   onCancel(): void {
     this.router.navigate(['/stash']);
   }
+
+  onDelete(): void {
+    const userId = this.userStore.user().id;
+    const fabricId = this.fabric().id;
+    this.fabricService
+      .deleteFabric(userId, fabricId)
+      .then(() => {
+        this.router.navigate(['/stash']);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
 }
