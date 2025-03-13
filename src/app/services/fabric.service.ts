@@ -4,6 +4,7 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDoc,
   getFirestore,
   onSnapshot,
   orderBy,
@@ -31,6 +32,16 @@ export class FabricService {
       ];
       this.stashStore.setStash(fabrics);
     });
+  }
+
+  async getFabric(userId: string, fabricId: string): Promise<Fabric> {
+    const d = doc(this.fs, `users/${userId}/fabrics/${fabricId}`);
+    const fabricDoc = await getDoc(d);
+    if (!fabricDoc.exists()) {
+      throw new Error('Fabric not found');
+    }
+    const fabric = new Fabric({ id: fabricDoc.id, ...fabricDoc.data() });
+    return fabric;
   }
 
   async addFabric(userId: string, fabric: Partial<Fabric>): Promise<any> {
