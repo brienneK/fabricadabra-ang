@@ -143,10 +143,6 @@ tfoot tr {
   color: mat.get-theme-color(theme.$light-theme, primary, 0) !important;
 }
 
-// table th {
-//   font-weight: bold !important;
-// }
-
 .scrollable-table {
   border: 2px solid;
 }
@@ -155,4 +151,9 @@ tfoot tr {
     margin-top: 8px;
     display: grid;
     justify-content: center;
+}
+
+.clickable-row:hover {
+  background-color: mat.get-theme-color(theme.$light-theme, secondary, 70) !important;
+  cursor: pointer;
 }

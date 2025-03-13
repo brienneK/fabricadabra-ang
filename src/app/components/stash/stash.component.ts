@@ -12,7 +12,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { LoadingService } from '@shared/loading/loading.service';
 import { Fabric } from '@models/fabric.model';
 import { FabricService } from '@services/fabric.service';
@@ -46,6 +46,7 @@ export class StashComponent {
   storage = inject(getStorage);
   fabricService = inject(FabricService);
   sorter = inject(SortingService);
+  router = inject(Router);
   loading = inject(LoadingService);
   stashStore = inject(StashStore);
   userStore = inject(UserStore);
@@ -97,5 +98,10 @@ export class StashComponent {
   sortFabrics(e: { active: string; direction: string }): void {
     this.sortField.set(e.active);
     this.sortAsc.set(e.direction == 'asc');
+  }
+
+  onRowClick(fabric: Fabric): void {
+    this.loading.loadingOn();
+    this.router.navigate(['/edit-fabric', fabric.id]);
   }
 }

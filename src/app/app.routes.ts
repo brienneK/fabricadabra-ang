@@ -11,6 +11,7 @@ import { RegisterFormComponent } from '@components/auth/login/register-form/regi
 import { ResetPasswordComponent } from '@components/auth/login/reset-password/reset-password.component';
 import { AccountComponent } from '@components/auth/account/account.component';
 import { authGuard, loggedInGuard } from '@components/auth/guards.guard';
+import { EditFabricComponent } from '@components/stash/edit-fabric/edit-fabric.component';
 
 export const routes: Routes = [
   {
@@ -54,6 +55,12 @@ export const routes: Routes = [
     path: 'add-fabric',
     title: 'Add Fabric',
     component: AddFabricComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'edit-fabric/:id',
+    title: 'Edit Fabric',
+    component: EditFabricComponent,
     canActivate: [authGuard],
   },
   {
