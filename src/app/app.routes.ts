@@ -12,6 +12,8 @@ import { ResetPasswordComponent } from '@components/auth/login/reset-password/re
 import { AccountComponent } from '@components/auth/account/account.component';
 import { authGuard, loggedInGuard } from '@components/auth/guards.guard';
 import { EditFabricComponent } from '@components/stash/edit-fabric/edit-fabric.component';
+import { Fabric } from '@models/fabric.model';
+import { editFabricResolver } from '@components/stash/edit-fabric/edit-fabric.resolver';
 
 export const routes: Routes = [
   {
@@ -61,6 +63,7 @@ export const routes: Routes = [
     path: 'edit-fabric/:id',
     title: 'Edit Fabric',
     component: EditFabricComponent,
+    resolve: { fabric: editFabricResolver },
     canActivate: [authGuard],
   },
   {
