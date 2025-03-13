@@ -16,6 +16,7 @@ import { Fabric } from '@models/fabric.model';
 import { FabricService } from '@services/fabric.service';
 import { LoadingService } from '@shared/loading/loading.service';
 import { StashStore } from '@store/stash.store';
+import { UserStore } from '@store/user.store';
 
 @Component({
   selector: 'app-edit-fabric',
@@ -39,6 +40,7 @@ export class EditFabricComponent {
   protected readonly loading = inject(LoadingService);
   protected readonly stashStore = inject(StashStore);
   protected readonly fabricService = inject(FabricService);
+  protected readonly userStore = inject(UserStore);
 
   fabric = signal<Fabric>(null);
 
@@ -82,8 +84,11 @@ export class EditFabricComponent {
 
   onSubmit(): void {
     this.editFabricForm.disable();
+    const userId = this.userStore.user().id;
+    const fabricId = this.fabric().id;
     const val = this.editFabricForm.value;
     const changes: Partial<Fabric> = {
+      id: fabricId,
       fiber: val.fiber,
       material: val.material,
       pattern: val.pattern,
@@ -95,7 +100,7 @@ export class EditFabricComponent {
       price: val.price,
     };
     this.fabricService
-      .updateFabric(this.fabric().id, changes)
+      .updateFabric(userId, changes)
       .then(() => {
         this.router.navigate(['/stash']);
       })

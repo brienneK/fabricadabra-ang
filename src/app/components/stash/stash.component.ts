@@ -59,9 +59,7 @@ export class StashComponent {
   smallScreen = signal<boolean>(false);
 
   filteredFabrics = computed(() => {
-    console.log('Computing filtered fabrics');
     return this.fabrics().filter((fabric) => {
-      console.log('Filtering fabric:', fabric);
       return fabric.length > 0;
     });
   });
