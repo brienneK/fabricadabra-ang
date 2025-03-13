@@ -1,11 +1,7 @@
-<header>
-  <div>
+<div>
+  <div class="container">
     <h2>Edit Fabric</h2>
-  </div>
-</header>
-<main>
-  <div>
-    <form [formGroup]="editFabricForm">
+    <form class="fabric-form" [formGroup]="editFabricForm">
       <mat-form-field>
         <mat-label>Fiber</mat-label>
         <input matInput type="text" formControlName="fiber" />
@@ -59,20 +55,23 @@
         </mat-form-field>
       </div>
       <mat-checkbox type="checkbox" formControlName="scrap">Scrap</mat-checkbox>
-      <div>
-        <button
-          mat-raised-button
-          class="btn-secondary"
-          type="submit"
-          defaultButton
-          (click)="onSubmit()"
-        >
-          Save
-        </button>
-        <button mat-stroked-button type="button" (click)="onCancel()">
-          Cancel
-        </button>
-      </div>
+      <button
+        mat-stroked-button
+        class="btn-tertiary"
+        type="button"
+        (click)="onCancel()"
+      >
+        Cancel
+      </button>
+      <button
+        mat-raised-button
+        class="btn-secondary"
+        type="submit"
+        defaultButton
+        (click)="onSubmit()"
+      >
+        Save
+      </button>
     </form>
   </div>
-</main>
+</div>

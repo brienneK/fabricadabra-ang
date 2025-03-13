@@ -30,7 +30,7 @@ import { StashStore } from '@store/stash.store';
     MatCheckbox,
   ],
   templateUrl: './edit-fabric.component.html',
-  styleUrl: './edit-fabric.component.css',
+  styleUrl: './edit-fabric.component.scss',
 })
 export class EditFabricComponent {
   protected readonly fb = inject(FormBuilder);
