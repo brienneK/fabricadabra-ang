@@ -12,6 +12,7 @@ export class Fabric {
   scrap: boolean;
   source: string;
   price: number;
+  purchaseDate: Date;
   public get yardage(): number {
     return Math.floor(this.length / 36);
   }

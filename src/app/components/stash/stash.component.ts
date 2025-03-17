@@ -21,6 +21,7 @@ import { StashStore } from '@store/stash.store';
 import { UserStore } from '@store/user.store';
 import { getStorage } from 'firebase/storage';
 import { CheckmarkPipe } from '@shared/pipes/checkmark.pipe';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-stash',
@@ -38,6 +39,7 @@ import { CheckmarkPipe } from '@shared/pipes/checkmark.pipe';
     MatInputModule,
     RouterLink,
     CheckmarkPipe,
+    CurrencyPipe,
   ],
   templateUrl: './stash.component.html',
   styleUrl: './stash.component.scss',
@@ -91,8 +93,10 @@ export class StashComponent {
             'color',
             'width',
             'length',
-            'source',
             'scrap',
+            'source',
+            'purchaseDate',
+            'price',
           ]);
           this.smallScreen.set(false);
         }

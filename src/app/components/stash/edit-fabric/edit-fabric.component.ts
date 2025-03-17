@@ -1,4 +1,6 @@
 import { signal } from '@angular/core';
+import { ElementRef } from '@angular/core';
+import { viewChild } from '@angular/core';
 import { inject } from '@angular/core';
 import { Component } from '@angular/core';
 import { Validators } from '@angular/forms';
@@ -8,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatOptionModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import {
   MatDialog,
   MatDialogConfig,
@@ -35,6 +38,7 @@ import { UserStore } from '@store/user.store';
     MatInputModule,
     MatIconModule,
     MatCheckbox,
+    MatDatepickerModule,
     MatDialogModule,
     DeleteDialogComponent,
   ],
@@ -50,6 +54,7 @@ export class EditFabricComponent {
   protected readonly stashStore = inject(StashStore);
   protected readonly fabricService = inject(FabricService);
   protected readonly userStore = inject(UserStore);
+  datePicker = viewChild<ElementRef>('datePicker');
 
   fabric = signal<Fabric>(null);
 
@@ -63,6 +68,7 @@ export class EditFabricComponent {
     scrap: [false],
     source: [''],
     price: [0],
+    purchaseDate: [new Date()],
   });
 
   ngOnInit(): void {
@@ -79,6 +85,7 @@ export class EditFabricComponent {
         scrap: fabric.scrap,
         source: fabric.source,
         price: fabric.price,
+        purchaseDate: fabric.purchaseDate,
       });
     } else {
       console.log('Route data:', this.route.snapshot.data);

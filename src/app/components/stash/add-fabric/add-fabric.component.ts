@@ -19,6 +19,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { Router, RouterModule } from '@angular/router';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { viewChild } from '@angular/core';
+import { ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-add-fabric',
@@ -34,6 +37,7 @@ import { Router, RouterModule } from '@angular/router';
     MatIconModule,
     MatTabsModule,
     MatCheckboxModule,
+    MatDatepickerModule,
   ],
   templateUrl: './add-fabric.component.html',
   styleUrl: './add-fabric.component.scss',
@@ -45,6 +49,7 @@ export class AddFabricComponent {
   fabricService = inject(FabricService);
   userStore = inject(UserStore);
   protected readonly router = inject(Router);
+  datePicker = viewChild<ElementRef>('datePicker');
 
   get f() {
     return this.addFabricForm.controls;
@@ -60,6 +65,7 @@ export class AddFabricComponent {
     scrap: [false],
     source: [''],
     price: [0],
+    purchaseDate: [new Date()],
   });
 
   onSubmit(submitAndAddAnother: boolean = false) {
@@ -75,6 +81,7 @@ export class AddFabricComponent {
       scrap: val.scrap,
       source: val.source,
       price: val.price,
+      purchaseDate: val.purchaseDate,
     };
     this.fabricService
       .addFabric(this.userStore.user().id, fabric)
