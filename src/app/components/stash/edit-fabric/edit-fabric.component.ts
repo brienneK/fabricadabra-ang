@@ -89,7 +89,6 @@ export class EditFabricComponent {
       });
     } else {
       console.log('Route data:', this.route.snapshot.data);
-      const fabric = this.route.snapshot.data.fabric;
       console.log('Fabric object:', fabric);
     }
   }
