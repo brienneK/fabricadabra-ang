@@ -3,18 +3,19 @@
   @if (filteredFabrics().length === 0) {
   <div class="empty-stash">
     <h2>Oh no! You don't have any fabrics in your stash yet.</h2>
+    <p>Click the button below to begin cataloging your stash.</p>
     <p>
-      Click the button below to begin cataloging your stash or head to your
-      nearest fabric shop immediately to remedy this lack of supplies.
+      Or, head to your nearest fabric shop immediately to remedy this lack of
+      supplies.
     </p>
     <a mat-flat-button routerLink="/add-fabric">Add fabric</a>
   </div>
   } @else {
-  <div class="stash-header">
-    <h1>My Stash</h1>
-    <a mat-flat-button routerLink="/add-fabric">Add fabric</a>
-  </div>
   <div class="table-container">
+    <div class="stash-header">
+      <h2>My Stash</h2>
+      <a mat-flat-button routerLink="/add-fabric">Add fabric</a>
+    </div>
     <div class="scrollable-table mat-elevation-z8">
       <table
         mat-table

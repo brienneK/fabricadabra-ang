@@ -27,12 +27,11 @@
 
 .stash-header {
     display: grid;
-    grid-template-columns: 25% 25%;
+    grid-template-columns:50% 50%;
     padding-top: 40px;
     padding-bottom: 10px;
-    justify-content: center;
     
-    h1 {
+    h2 {
         font-size: 2em;
         font-weight: bold;
         color: black;
@@ -40,8 +39,8 @@
     }
 
     a {
-        justify-self: right;
+      justify-items: right;
+      justify-self: right;
     }
+
 }
-  
-  
