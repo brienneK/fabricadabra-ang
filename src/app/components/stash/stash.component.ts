@@ -9,7 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatSortModule } from '@angular/material/sort';
+import { MatSort, Sort, MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router, RouterLink } from '@angular/router';
@@ -53,16 +53,18 @@ export class StashComponent {
   breakpointObserver = inject(BreakpointObserver);
   fabrics: Signal<Fabric[]> = this.stashStore.stash;
 
-  sortField = signal<string>('fiber');
+  sortField = signal<string>('');
   sortAsc = signal<boolean>(true);
   columnsToDisplay = signal<string[]>([]);
   smallScreen = signal<boolean>(false);
 
   filteredFabrics = computed(() => {
-    return this.fabrics().filter((fabric) => {
-      return fabric.length > 0;
+    const filtered = this.fabrics().filter((fabric) => {
+      return true;
     });
+    return this.sorter.sort(filtered, this.sortField(), this.sortAsc());
   });
+
   ngOnInit(): void {
     this.breakpointObserver
       .observe('(max-width: 1009px)')
