@@ -39,8 +39,17 @@
     }
 
     a {
+      font-size: large;
       justify-items: right;
       justify-self: right;
     }
 
+}
+
+th {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: black;
+    padding: 10px;
+    text-align: left;
 }
