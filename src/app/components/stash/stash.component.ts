@@ -68,7 +68,6 @@ export class StashComponent {
       return [];
     }
     const filtered = stash.filter((fabric) => {
-      console.log(fabric.purchaseDate);
       return fabric.length > 0;
     });
     return this.sorter.sort(filtered, this.sortField(), this.sortAsc());
