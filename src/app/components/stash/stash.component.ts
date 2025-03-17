@@ -59,8 +59,12 @@ export class StashComponent {
   smallScreen = signal<boolean>(false);
 
   filteredFabrics = computed(() => {
-    const filtered = this.fabrics().filter((fabric) => {
-      return true;
+    const stash = this.fabrics();
+    if (stash.length === 0) {
+      return [];
+    }
+    const filtered = stash.filter((fabric) => {
+      return fabric.length > 0;
     });
     return this.sorter.sort(filtered, this.sortField(), this.sortAsc());
   });
