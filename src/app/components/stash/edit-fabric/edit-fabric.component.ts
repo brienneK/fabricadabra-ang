@@ -8,12 +8,18 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatOptionModule } from '@angular/material/core';
+import {
+  MatDialog,
+  MatDialogConfig,
+  MatDialogModule,
+} from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Fabric } from '@models/fabric.model';
 import { FabricService } from '@services/fabric.service';
+import { DeleteDialogComponent } from '@shared/delete-dialog/delete-dialog.component';
 import { LoadingService } from '@shared/loading/loading.service';
 import { StashStore } from '@store/stash.store';
 import { UserStore } from '@store/user.store';
@@ -29,6 +35,8 @@ import { UserStore } from '@store/user.store';
     MatInputModule,
     MatIconModule,
     MatCheckbox,
+    MatDialogModule,
+    DeleteDialogComponent,
   ],
   templateUrl: './edit-fabric.component.html',
   styleUrl: './edit-fabric.component.scss',
@@ -38,6 +46,7 @@ export class EditFabricComponent {
   protected readonly router = inject(Router);
   protected readonly route = inject(ActivatedRoute);
   protected readonly loading = inject(LoadingService);
+  protected readonly dialog = inject(MatDialog);
   protected readonly stashStore = inject(StashStore);
   protected readonly fabricService = inject(FabricService);
   protected readonly userStore = inject(UserStore);
@@ -114,15 +123,25 @@ export class EditFabricComponent {
   }
 
   onDelete(): void {
-    const userId = this.userStore.user().id;
-    const fabricId = this.fabric().id;
-    this.fabricService
-      .deleteFabric(userId, fabricId)
-      .then(() => {
-        this.router.navigate(['/stash']);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {
+      operation: 'delete',
+      target: 'this fabric',
+    };
+    const dialogRef = this.dialog.open(DeleteDialogComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe((confirm) => {
+      if (confirm) {
+        const userId = this.userStore.user().id;
+        const fabricId = this.fabric().id;
+        this.fabricService
+          .deleteFabric(userId, fabricId)
+          .then(() => {
+            this.router.navigate(['/stash']);
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      }
+    });
   }
 }
