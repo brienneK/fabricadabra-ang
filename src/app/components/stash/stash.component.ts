@@ -22,6 +22,7 @@ import { UserStore } from '@store/user.store';
 import { getStorage } from 'firebase/storage';
 import { CheckmarkPipe } from '@shared/pipes/checkmark.pipe';
 import { CurrencyPipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-stash',
@@ -40,6 +41,7 @@ import { CurrencyPipe } from '@angular/common';
     RouterLink,
     CheckmarkPipe,
     CurrencyPipe,
+    DatePipe,
   ],
   templateUrl: './stash.component.html',
   styleUrl: './stash.component.scss',
@@ -66,6 +68,7 @@ export class StashComponent {
       return [];
     }
     const filtered = stash.filter((fabric) => {
+      console.log(fabric.purchaseDate);
       return fabric.length > 0;
     });
     return this.sorter.sort(filtered, this.sortField(), this.sortAsc());

@@ -81,7 +81,7 @@ export class AddFabricComponent {
       scrap: val.scrap,
       source: val.source,
       price: val.price,
-      purchaseDate: val.purchaseDate,
+      purchaseDate: new Date(val.purchaseDate),
     };
     this.fabricService
       .addFabric(this.userStore.user().id, fabric)

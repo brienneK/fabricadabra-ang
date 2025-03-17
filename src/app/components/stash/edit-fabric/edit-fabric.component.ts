@@ -85,7 +85,7 @@ export class EditFabricComponent {
         scrap: fabric.scrap,
         source: fabric.source,
         price: fabric.price,
-        purchaseDate: fabric.purchaseDate,
+        purchaseDate: fabric.purchaseDate.toDate(),
       });
     } else {
       console.log('Route data:', this.route.snapshot.data);
@@ -114,6 +114,7 @@ export class EditFabricComponent {
       scrap: val.scrap,
       source: val.source,
       price: val.price,
+      purchaseDate: val.purchaseDate,
     };
     this.fabricService
       .updateFabric(userId, changes)
