@@ -79,7 +79,7 @@ export class StashComponent {
       .subscribe((result) => {
         if (result.matches) {
           this.columnsToDisplay.set([
-            'fiber',
+            'fibers',
             'material',
             'pattern',
             'color',
@@ -89,7 +89,7 @@ export class StashComponent {
           this.smallScreen.set(true);
         } else {
           this.columnsToDisplay.set([
-            'fiber',
+            'fibers',
             'material',
             'pattern',
             'color',

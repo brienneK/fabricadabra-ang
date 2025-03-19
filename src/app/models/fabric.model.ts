@@ -1,9 +1,11 @@
+import { Fiber } from './fiber.model';
+
 export class Fabric {
   constructor(init?: Partial<Fabric>) {
     Object.assign(this, init);
   }
   id: string;
-  fiber: string;
+  fibers: Fiber[];
   material: string;
   pattern: string;
   color: string;

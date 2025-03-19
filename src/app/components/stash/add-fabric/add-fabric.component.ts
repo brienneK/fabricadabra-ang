@@ -22,6 +22,9 @@ import { Router, RouterModule } from '@angular/router';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { viewChild } from '@angular/core';
 import { ElementRef } from '@angular/core';
+import { Fiber } from '@models/fiber.model';
+import { Form } from '@angular/forms';
+import { FormArray } from '@angular/forms';
 
 @Component({
   selector: 'app-add-fabric',
@@ -51,12 +54,8 @@ export class AddFabricComponent {
   protected readonly router = inject(Router);
   datePicker = viewChild<ElementRef>('datePicker');
 
-  get f() {
-    return this.addFabricForm.controls;
-  }
-
   addFabricForm = this.fb.group({
-    fiber: ['', [Validators.required]],
+    fibers: this.fb.array([], [Validators.required, Validators.minLength(1)]),
     material: ['', [Validators.required]],
     pattern: ['', [Validators.required]],
     color: ['', [Validators.required]],
@@ -68,11 +67,27 @@ export class AddFabricComponent {
     purchaseDate: [new Date()],
   });
 
+  get f() {
+    return this.addFabricForm.controls;
+  }
+
+  get fibersFormArray(): FormArray {
+    return this.addFabricForm.get('fibers') as FormArray;
+  }
+
+  addFiber() {
+    this.fibersFormArray.push(
+      this.fb.group({
+        fiber: ['', [Validators.required]],
+        percentage: [0, [Validators.required]],
+      })
+    );
+  }
+
   onSubmit(submitAndAddAnother: boolean = false) {
     this.addFabricForm.disable();
     const val = this.addFabricForm.value;
     const fabric: Partial<Fabric> = {
-      fiber: val.fiber,
       material: val.material,
       pattern: val.pattern,
       color: val.color,
@@ -83,8 +98,16 @@ export class AddFabricComponent {
       price: val.price,
       purchaseDate: new Date(val.purchaseDate),
     };
+    let fibers: Partial<Fiber>[] = [];
+    this.fibersFormArray.value.forEach((f: Fiber) => {
+      const fiber: Partial<Fiber> = {
+        fiber: f.fiber,
+        percentage: f.percentage,
+      };
+      fibers.push(fiber);
+    });
     this.fabricService
-      .addFabric(this.userStore.user().id, fabric)
+      .addFabric(this.userStore.user().id, fabric, fibers)
       .then(() => {
         this.addFabricForm.enable();
         this.addFabricForm.reset();

@@ -3,6 +3,7 @@ import { ElementRef } from '@angular/core';
 import { viewChild } from '@angular/core';
 import { inject } from '@angular/core';
 import { Component } from '@angular/core';
+import { FormArray } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { FormBuilder } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -21,6 +22,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Fabric } from '@models/fabric.model';
+import { Fiber } from '@models/fiber.model';
 import { FabricService } from '@services/fabric.service';
 import { DeleteDialogComponent } from '@shared/delete-dialog/delete-dialog.component';
 import { LoadingService } from '@shared/loading/loading.service';
@@ -40,7 +42,6 @@ import { UserStore } from '@store/user.store';
     MatCheckbox,
     MatDatepickerModule,
     MatDialogModule,
-    DeleteDialogComponent,
   ],
   templateUrl: './edit-fabric.component.html',
   styleUrl: './edit-fabric.component.scss',
@@ -59,7 +60,7 @@ export class EditFabricComponent {
   fabric = signal<Fabric>(null);
 
   editFabricForm = this.fb.group({
-    fiber: ['', Validators.required],
+    fibers: this.fb.array([], [Validators.required, Validators.minLength(1)]),
     material: [''],
     pattern: [''],
     color: [''],
@@ -76,7 +77,6 @@ export class EditFabricComponent {
     if (fabric) {
       this.fabric.set(fabric);
       this.editFabricForm.patchValue({
-        fiber: fabric.fiber,
         material: fabric.material,
         pattern: fabric.pattern,
         color: fabric.color,
@@ -97,6 +97,10 @@ export class EditFabricComponent {
     return this.editFabricForm.controls;
   }
 
+  get fibersFormArray(): FormArray {
+    return this.editFabricForm.get('fibers') as FormArray;
+  }
+
   onSubmit(): void {
     this.editFabricForm.disable();
     const userId = this.userStore.user().id;
@@ -104,7 +108,6 @@ export class EditFabricComponent {
     const val = this.editFabricForm.value;
     const changes: Partial<Fabric> = {
       id: fabricId,
-      fiber: val.fiber,
       material: val.material,
       pattern: val.pattern,
       color: val.color,
@@ -115,8 +118,16 @@ export class EditFabricComponent {
       price: val.price,
       purchaseDate: val.purchaseDate,
     };
+    let fibers: Partial<Fiber>[] = [];
+    this.fibersFormArray.value.forEach((f: Fiber) => {
+      const fiber: Partial<Fiber> = {
+        fiber: f.fiber,
+        percentage: f.percentage,
+      };
+      fibers.push(fiber);
+    });
     this.fabricService
-      .updateFabric(userId, changes)
+      .updateFabric(userId, changes, fibers)
       .then(() => {
         this.router.navigate(['/stash']);
       })

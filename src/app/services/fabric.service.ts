@@ -13,6 +13,7 @@ import {
 } from 'firebase/firestore';
 import { Fabric } from '../models/fabric.model';
 import { StashStore } from '@store/stash.store';
+import { Fiber } from '@models/fiber.model';
 
 @Injectable({
   providedIn: 'root',
@@ -44,13 +45,23 @@ export class FabricService {
     return fabric;
   }
 
-  async addFabric(userId: string, fabric: Partial<Fabric>): Promise<any> {
+  async addFabric(
+    userId: string,
+    fabric: Partial<Fabric>,
+    fibers: Partial<Fiber>[]
+  ): Promise<any> {
     const c = collection(this.fs, `users/${userId}/fabrics`);
+    fibers.forEach((fiber) => {});
     return await addDoc(c, fabric);
   }
 
-  async updateFabric(userId: string, fabric: Partial<Fabric>): Promise<any> {
+  async updateFabric(
+    userId: string,
+    fabric: Partial<Fabric>,
+    fibers: Partial<Fiber>[]
+  ): Promise<any> {
     const d = doc(this.fs, `users/${userId}/fabrics/${fabric.id}`);
+    fibers.forEach((fiber) => {});
     return await updateDoc(d, fabric);
   }
 
