@@ -84,6 +84,19 @@ export class AddFabricComponent {
     );
   }
 
+  deleteFiber(index: number) {
+    this.fibersFormArray.removeAt(index);
+  }
+
+  validateTotalPercentage() {
+    const totalPercentage = this.fibersFormArray.controls.reduce(
+      (total, control) => total + (control.get('percentage').value || 0),
+      0
+    );
+
+    return totalPercentage === 100;
+  }
+
   onSubmit(submitAndAddAnother: boolean = false) {
     this.addFabricForm.disable();
     const val = this.addFabricForm.value;

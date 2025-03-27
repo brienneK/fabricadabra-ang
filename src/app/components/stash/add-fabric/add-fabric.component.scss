@@ -1,10 +1,19 @@
 h2 {
     padding: 25px;
 }
-.fabric-form {
+
+.fiber-entry {
     display: grid;
-    grid-template-columns: 200px 200px;
-    grid-template-rows: 80px 80px; 
+    grid-template-columns: 200px  200px 200px; 
+    column-gap: 20px;
+}
+
+.fabric-details {
+    display: grid;
+    grid-template-columns: 200px 200px 200px;
+    grid-template-rows: 80px 80px 80px; 
     column-gap: 20px;
     row-gap: 15px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
