@@ -97,7 +97,7 @@ export class AddFabricComponent {
     return totalPercentage === 100;
   }
 
-  onSubmit(submitAndAddAnother: boolean = false) {
+  async onSubmit(submitAndAddAnother: boolean = false) {
     this.addFabricForm.disable();
     const val = this.addFabricForm.value;
     const fabric: Partial<Fabric> = {
@@ -111,28 +111,35 @@ export class AddFabricComponent {
       price: val.price,
       purchaseDate: new Date(val.purchaseDate),
     };
-    let fibers: Partial<Fiber>[] = [];
-    this.fibersFormArray.value.forEach((f: Fiber) => {
-      const fiber: Partial<Fiber> = {
+
+    // Prepare Fibers array
+    const fibersList: Partial<Fiber>[] = this.fibersFormArray.value.map(
+      (f: Fiber) => ({
         fiber: f.fiber,
         percentage: f.percentage,
-      };
-      fibers.push(fiber);
-    });
-    this.fabricService
-      .addFabric(this.userStore.user().id, fabric, fibers)
-      .then(() => {
-        this.addFabricForm.enable();
-        this.addFabricForm.reset();
-        if (submitAndAddAnother) {
-          this.router.navigateByUrl('/add-fabric');
-        } else {
-          this.router.navigateByUrl('/stash');
-        }
       })
-      .catch((err) => {
-        console.log(err);
-      });
+    );
+
+    // Call the service method with all three arguments
+    await this.fabricService.addFabric(
+      this.userStore.user().id,
+      fabric,
+      fibersList
+    );
+
+    // Reset form and navigate
+    this.addFabricForm.enable();
+    this.addFabricForm.reset();
+
+    if (submitAndAddAnother) {
+      this.router.navigateByUrl('/add-fabric');
+    } else {
+      this.router.navigateByUrl('/stash');
+    }
+  }
+  catch(err) {
+    console.error('Error adding fabric and fibers:', err);
+    this.addFabricForm.enable(); // Re-enable the form in case of error
   }
 
   onCancel() {

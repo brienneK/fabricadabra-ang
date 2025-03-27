@@ -5,11 +5,13 @@ import {
   deleteDoc,
   doc,
   getDoc,
+  getDocs,
   getFirestore,
   onSnapshot,
   orderBy,
   query,
   updateDoc,
+  writeBatch,
 } from 'firebase/firestore';
 import { Fabric } from '../models/fabric.model';
 import { StashStore } from '@store/stash.store';
@@ -50,9 +52,26 @@ export class FabricService {
     fabric: Partial<Fabric>,
     fibers: Partial<Fiber>[]
   ): Promise<any> {
-    const c = collection(this.fs, `users/${userId}/fabrics`);
-    fibers.forEach((fiber) => {});
-    return await addDoc(c, fabric);
+    // Create a batch to handle fabric and fibers atomically
+    const batch = writeBatch(this.fs);
+    const fabricsCollection = collection(this.fs, `users/${userId}/fabrics`);
+    const fabricDocRef = doc(fabricsCollection);
+    batch.set(fabricDocRef, fabric);
+
+    // Add fibers as a subcollection
+    if (fibers && fibers.length > 0) {
+      const fibersCollection = collection(fabricDocRef, 'fibers');
+
+      fibers.forEach((fiber) => {
+        const fiberDocRef = doc(fibersCollection);
+        batch.set(fiberDocRef, fiber);
+      });
+    }
+
+    // Commit the batch
+    await batch.commit();
+
+    return fabricDocRef;
   }
 
   async updateFabric(
@@ -60,13 +79,49 @@ export class FabricService {
     fabric: Partial<Fabric>,
     fibers: Partial<Fiber>[]
   ): Promise<any> {
-    const d = doc(this.fs, `users/${userId}/fabrics/${fabric.id}`);
-    fibers.forEach((fiber) => {});
-    return await updateDoc(d, fabric);
+    // Create a batch to handle fabric and fibers atomically
+    const batch = writeBatch(this.fs);
+    const fabricDocRef = doc(this.fs, `users/${userId}/fabrics/${fabric.id}`);
+    batch.update(fabricDocRef, fabric);
+    const fibersCollection = collection(fabricDocRef, 'fibers');
+
+    // First, delete existing fibers to prevent duplicates
+    const existingFibersQuery = query(fibersCollection);
+    const existingFibersSnapshot = await getDocs(existingFibersQuery);
+    existingFibersSnapshot.forEach((existingFiberDoc) => {
+      batch.delete(existingFiberDoc.ref);
+    });
+
+    // Add new fibers
+    if (fibers && fibers.length > 0) {
+      fibers.forEach((fiber) => {
+        const fiberDocRef = doc(fibersCollection);
+        batch.set(fiberDocRef, fiber);
+      });
+    }
+
+    // Commit the batch
+    await batch.commit();
+
+    return fabricDocRef;
   }
 
-  async deleteFabric(userId: string, fabricId: string): Promise<any> {
-    const d = doc(this.fs, `users/${userId}/fabrics/${fabricId}`);
-    return await deleteDoc(d);
+  async deleteFabric(userId: string, fabricId: string): Promise<void> {
+    const batch = writeBatch(this.fs);
+    const fabricDocRef = doc(this.fs, `users/${userId}/fabrics/${fabricId}`);
+    const fibersCollection = collection(fabricDocRef, 'fibers');
+    const fibersQuery = query(fibersCollection);
+    const fibersSnapshot = await getDocs(fibersQuery);
+
+    // Add deletion of all fiber documents to the batch
+    fibersSnapshot.forEach((fiberDoc) => {
+      batch.delete(fiberDoc.ref);
+    });
+
+    // Add deletion of the fabric document to the batch
+    batch.delete(fabricDocRef);
+
+    // Commit the batch to delete both fabric and its fibers
+    await batch.commit();
   }
 }
