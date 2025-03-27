@@ -2,11 +2,23 @@ h2 {
     padding: 25px;
 }
 
-.fiber-entry {
-    display: grid;
-    grid-template-columns: 200px  200px 200px; 
-    column-gap: 20px;
-}
+.fiber-row-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .fiber-entry {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .add-fiber-button {
+    align-self: center;
+    size: 30px;
+  }
 
 .fabric-details {
     display: grid;

@@ -67,6 +67,11 @@ export class AddFabricComponent {
     purchaseDate: [new Date()],
   });
 
+  ngOnInit() {
+    // Add a default fiber row
+    this.addFiber();
+  }
+
   get f() {
     return this.addFabricForm.controls;
   }

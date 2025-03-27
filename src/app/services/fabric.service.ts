@@ -24,16 +24,44 @@ export class FabricService {
   fs = inject(getFirestore);
   stashStore = inject(StashStore);
 
-  getFabrics(userId: string): void {
+  async getFabrics(userId: string): Promise<void> {
     const c = collection(this.fs, `users/${userId}/fabrics`);
     const q = query(c, orderBy('length', 'desc'));
-    onSnapshot(q, (snapshot) => {
-      const fabrics = [
-        ...snapshot.docs.map(
-          (doc) => new Fabric({ id: doc.id, ...doc.data() })
-        ),
-      ];
-      this.stashStore.setStash(fabrics);
+
+    onSnapshot(q, async (snapshot) => {
+      // Use Promise.all to fetch fibers for all fabrics concurrently
+      const fabricsWithFibers = await Promise.all(
+        snapshot.docs.map(async (fabricDoc) => {
+          // Create fabric object
+          const fabric = new Fabric({
+            id: fabricDoc.id,
+            ...fabricDoc.data(),
+          });
+
+          // Reference to fibers subcollection
+          const fibersCollection = collection(
+            this.fs,
+            `users/${userId}/fabrics/${fabricDoc.id}/fibers`
+          );
+
+          // Fetch fibers for this fabric
+          const fibersSnapshot = await getDocs(fibersCollection);
+
+          // Map fibers to an array
+          fabric.fibers = fibersSnapshot.docs.map(
+            (fiberDoc) =>
+              new Fiber({
+                id: fiberDoc.id,
+                ...fiberDoc.data(),
+              })
+          );
+
+          return fabric;
+        })
+      );
+
+      // Update the stash store with fabrics that now include fibers
+      this.stashStore.setStash(fabricsWithFibers);
     });
   }
 

@@ -32,9 +32,19 @@
             mat-sort-header
             sortActionDescription="sort by fiber"
           >
-            Fiber
+            Fibers
           </th>
-          <td mat-cell *matCellDef="let fabric">{{ fabric.fibers }}</td>
+          <td mat-cell *matCellDef="let fabric">
+            <div class="fiber-list">
+              @for (fiber of fabric.fibers; track fiber.id) {
+              <div class="fiber-item">
+                {{ fiber.fiber }} - {{ fiber.percentage }}%
+              </div>
+              } @empty {
+              <span class="no-fibers">No fibers specified</span>
+              }
+            </div>
+          </td>
         </ng-container>
         <ng-container matColumnDef="material">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Material</th>
