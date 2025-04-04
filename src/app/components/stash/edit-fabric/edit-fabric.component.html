@@ -9,8 +9,8 @@
           <div [formGroupName]="i" class="fiber-entry">
             <mat-form-field>
               <mat-label>Fiber</mat-label>
-              <input matInput formControlName="fibers" required />
-              @if (fiberControl.get('fibers')?.errors?.required) {
+              <input matInput formControlName="fiber" required />
+              @if (fiberControl.get('fiber')?.errors?.required) {
               <mat-error>Fiber is required.</mat-error>
               }
             </mat-form-field>

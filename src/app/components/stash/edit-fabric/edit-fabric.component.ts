@@ -3,6 +3,10 @@ import { ElementRef } from '@angular/core';
 import { viewChild } from '@angular/core';
 import { inject } from '@angular/core';
 import { Component } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { ValidationErrors } from '@angular/forms';
+import { AbstractControl } from '@angular/forms';
+import { ValidatorFn } from '@angular/forms';
 import { FormArray } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { FormBuilder } from '@angular/forms';
@@ -60,7 +64,14 @@ export class EditFabricComponent {
   fabric = signal<Fabric>(null);
 
   editFabricForm = this.fb.group({
-    fibers: this.fb.array([], [Validators.required, Validators.minLength(1)]),
+    fibers: this.fb.array(
+      [],
+      [
+        Validators.required,
+        Validators.minLength(1),
+        this.totalPercentageValidator(),
+      ]
+    ),
     material: [''],
     pattern: [''],
     color: [''],
@@ -71,6 +82,46 @@ export class EditFabricComponent {
     price: [0],
     purchaseDate: [new Date()],
   });
+
+  get f() {
+    return this.editFabricForm.controls;
+  }
+
+  get fibersFormArray(): FormArray {
+    return this.editFabricForm.get('fibers') as FormArray;
+  }
+
+  createFiberFormGroup(fiber?: Partial<Fiber>): FormGroup {
+    return this.fb.group({
+      fiber: [fiber?.fiber || '', Validators.required],
+      percentage: [
+        fiber?.percentage || 0,
+        [Validators.required, Validators.min(1), Validators.max(100)],
+      ],
+    });
+  }
+
+  addFiber(): void {
+    this.fibersFormArray.push(this.createFiberFormGroup());
+  }
+
+  deleteFiber(index: number): void {
+    this.fibersFormArray.removeAt(index);
+  }
+
+  totalPercentageValidator(): ValidatorFn {
+    return (formArray: AbstractControl): ValidationErrors | null => {
+      if (!(formArray instanceof FormArray)) {
+        return null;
+      }
+
+      const sum = formArray.controls
+        .map((control) => Number(control.get('percentage')?.value || 0))
+        .reduce((acc, curr) => acc + curr, 0);
+
+      return sum === 100 ? null : { totalPercentage: true };
+    };
+  }
 
   ngOnInit(): void {
     const fabric = this.route.snapshot.data.fabric;
@@ -87,18 +138,26 @@ export class EditFabricComponent {
         price: fabric.price,
         purchaseDate: fabric.purchaseDate.toDate(),
       });
+
+      // Clear and populate the fibers form array
+      const fibersArray = this.editFabricForm.get('fibers') as FormArray;
+      fibersArray.clear();
+
+      if (fabric.fibers && fabric.fibers.length > 0) {
+        fabric.fibers.forEach((fiber) => {
+          fibersArray.push(this.createFiberFormGroup(fiber));
+        });
+      } else {
+        // Add at least one empty fiber form group
+        this.addFiber();
+      }
     } else {
       console.log('Route data:', this.route.snapshot.data);
       console.log('Fabric object:', fabric);
+
+      // Add an initial empty fiber form group
+      this.addFiber();
     }
-  }
-
-  get f() {
-    return this.editFabricForm.controls;
-  }
-
-  get fibersFormArray(): FormArray {
-    return this.editFabricForm.get('fibers') as FormArray;
   }
 
   onSubmit(): void {
@@ -119,9 +178,9 @@ export class EditFabricComponent {
       purchaseDate: val.purchaseDate,
     };
     let fibers: Partial<Fiber>[] = [];
-    this.fibersFormArray.value.forEach((f: Fiber) => {
+    this.fibersFormArray.value.forEach((f: any) => {
       const fiber: Partial<Fiber> = {
-        fiber: f.fiber,
+        fiber: f.fiber, // Now using f.fiber instead of f.fibers
         percentage: f.percentage,
       };
       fibers.push(fiber);
