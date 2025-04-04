@@ -10,6 +10,7 @@ import {
   onSnapshot,
   orderBy,
   query,
+  where,
   updateDoc,
   writeBatch,
 } from 'firebase/firestore';
@@ -72,6 +73,14 @@ export class FabricService {
       throw new Error('Fabric not found');
     }
     const fabric = new Fabric({ id: fabricDoc.id, ...fabricDoc.data() });
+    const fiberQuery = query(
+      collection(this.fs, `users/${userId}/fabrics/${fabricId}/fibers`),
+      where('percentage', '>', 0)
+    );
+    const fiberDocs = await getDocs(fiberQuery);
+    fabric.fibers = fiberDocs.docs.map((d) => {
+      return new Fiber({ id: d.id, ...d.data() });
+    });
     return fabric;
   }
 
