@@ -1,10 +1,31 @@
 h2 {
     padding: 25px;
 }
-.fabric-form {
+
+.fiber-row-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .fiber-entry {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .add-fiber-button {
+    align-self: center;
+    size: 30px;
+  }
+
+.fabric-details {
     display: grid;
-    grid-template-columns: 200px 200px;
-    grid-template-rows: 80px 80px; 
+    grid-template-columns: 200px 200px 200px;
+    grid-template-rows: 80px 80px 80px; 
     column-gap: 20px;
     row-gap: 15px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }

@@ -3,6 +3,11 @@ import { ElementRef } from '@angular/core';
 import { viewChild } from '@angular/core';
 import { inject } from '@angular/core';
 import { Component } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { ValidationErrors } from '@angular/forms';
+import { AbstractControl } from '@angular/forms';
+import { ValidatorFn } from '@angular/forms';
+import { FormArray } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { FormBuilder } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -21,11 +26,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Fabric } from '@models/fabric.model';
+import { Fiber } from '@models/fiber.model';
 import { FabricService } from '@services/fabric.service';
 import { DeleteDialogComponent } from '@shared/delete-dialog/delete-dialog.component';
 import { LoadingService } from '@shared/loading/loading.service';
 import { StashStore } from '@store/stash.store';
 import { UserStore } from '@store/user.store';
+import { Timestamp } from 'firebase/firestore';
 
 @Component({
   selector: 'app-edit-fabric',
@@ -40,7 +47,6 @@ import { UserStore } from '@store/user.store';
     MatCheckbox,
     MatDatepickerModule,
     MatDialogModule,
-    DeleteDialogComponent,
   ],
   templateUrl: './edit-fabric.component.html',
   styleUrl: './edit-fabric.component.scss',
@@ -59,7 +65,14 @@ export class EditFabricComponent {
   fabric = signal<Fabric>(null);
 
   editFabricForm = this.fb.group({
-    fiber: ['', Validators.required],
+    fibers: this.fb.array(
+      [],
+      [
+        Validators.required,
+        Validators.minLength(1),
+        this.totalPercentageValidator(),
+      ]
+    ),
     material: [''],
     pattern: [''],
     color: [''],
@@ -71,12 +84,51 @@ export class EditFabricComponent {
     purchaseDate: [new Date()],
   });
 
+  get f() {
+    return this.editFabricForm.controls;
+  }
+
+  get fibersFormArray(): FormArray {
+    return this.editFabricForm.get('fibers') as FormArray;
+  }
+
+  createFiberFormGroup(fiber?: Partial<Fiber>): FormGroup {
+    return this.fb.group({
+      fiber: [fiber?.fiber || '', Validators.required],
+      percentage: [
+        fiber?.percentage || 0,
+        [Validators.required, Validators.min(1), Validators.max(100)],
+      ],
+    });
+  }
+
+  addFiber(): void {
+    this.fibersFormArray.push(this.createFiberFormGroup());
+  }
+
+  deleteFiber(index: number): void {
+    this.fibersFormArray.removeAt(index);
+  }
+
+  totalPercentageValidator(): ValidatorFn {
+    return (formArray: AbstractControl): ValidationErrors | null => {
+      if (!(formArray instanceof FormArray)) {
+        return null;
+      }
+
+      const sum = formArray.controls
+        .map((control) => Number(control.get('percentage')?.value || 0))
+        .reduce((acc, curr) => acc + curr, 0);
+
+      return sum === 100 ? null : { totalPercentage: true };
+    };
+  }
+
   ngOnInit(): void {
     const fabric = this.route.snapshot.data.fabric;
     if (fabric) {
       this.fabric.set(fabric);
       this.editFabricForm.patchValue({
-        fiber: fabric.fiber,
         material: fabric.material,
         pattern: fabric.pattern,
         color: fabric.color,
@@ -87,14 +139,26 @@ export class EditFabricComponent {
         price: fabric.price,
         purchaseDate: fabric.purchaseDate.toDate(),
       });
+
+      // Clear and populate the fibers form array
+      const fibersArray = this.editFabricForm.get('fibers') as FormArray;
+      fibersArray.clear();
+
+      if (fabric.fibers && fabric.fibers.length > 0) {
+        fabric.fibers.forEach((fiber) => {
+          fibersArray.push(this.createFiberFormGroup(fiber));
+        });
+      } else {
+        // Add at least one empty fiber form group
+        this.addFiber();
+      }
     } else {
       console.log('Route data:', this.route.snapshot.data);
       console.log('Fabric object:', fabric);
-    }
-  }
 
-  get f() {
-    return this.editFabricForm.controls;
+      // Add an initial empty fiber form group
+      this.addFiber();
+    }
   }
 
   onSubmit(): void {
@@ -104,7 +168,6 @@ export class EditFabricComponent {
     const val = this.editFabricForm.value;
     const changes: Partial<Fabric> = {
       id: fabricId,
-      fiber: val.fiber,
       material: val.material,
       pattern: val.pattern,
       color: val.color,
@@ -114,9 +177,18 @@ export class EditFabricComponent {
       source: val.source,
       price: val.price,
       purchaseDate: val.purchaseDate,
+      lastUpdated: new Date() as unknown as Timestamp,
     };
+    let fibers: Partial<Fiber>[] = [];
+    this.fibersFormArray.value.forEach((f: any) => {
+      const fiber: Partial<Fiber> = {
+        fiber: f.fiber, // Now using f.fiber instead of f.fibers
+        percentage: f.percentage,
+      };
+      fibers.push(fiber);
+    });
     this.fabricService
-      .updateFabric(userId, changes)
+      .updateFabric(userId, changes, fibers)
       .then(() => {
         this.router.navigate(['/stash']);
       })

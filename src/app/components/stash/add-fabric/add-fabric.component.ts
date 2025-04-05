@@ -10,6 +10,7 @@ import { UserStore } from '@store/user.store';
 import { Fabric } from '@models/fabric.model';
 import { FabricService } from '@services/fabric.service';
 import { getAnalytics } from 'firebase/analytics';
+import { Timestamp } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 import { MatOptionModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -22,6 +23,8 @@ import { Router, RouterModule } from '@angular/router';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { viewChild } from '@angular/core';
 import { ElementRef } from '@angular/core';
+import { Fiber } from '@models/fiber.model';
+import { FormArray } from '@angular/forms';
 
 @Component({
   selector: 'app-add-fabric',
@@ -51,12 +54,8 @@ export class AddFabricComponent {
   protected readonly router = inject(Router);
   datePicker = viewChild<ElementRef>('datePicker');
 
-  get f() {
-    return this.addFabricForm.controls;
-  }
-
   addFabricForm = this.fb.group({
-    fiber: ['', [Validators.required]],
+    fibers: this.fb.array([], [Validators.required, Validators.minLength(1)]),
     material: ['', [Validators.required]],
     pattern: ['', [Validators.required]],
     color: ['', [Validators.required]],
@@ -68,11 +67,45 @@ export class AddFabricComponent {
     purchaseDate: [new Date()],
   });
 
-  onSubmit(submitAndAddAnother: boolean = false) {
+  ngOnInit() {
+    // Add a default fiber row
+    this.addFiber();
+  }
+
+  get f() {
+    return this.addFabricForm.controls;
+  }
+
+  get fibersFormArray(): FormArray {
+    return this.addFabricForm.get('fibers') as FormArray;
+  }
+
+  addFiber() {
+    this.fibersFormArray.push(
+      this.fb.group({
+        fiber: ['', [Validators.required]],
+        percentage: [0, [Validators.required]],
+      })
+    );
+  }
+
+  deleteFiber(index: number) {
+    this.fibersFormArray.removeAt(index);
+  }
+
+  validateTotalPercentage() {
+    const totalPercentage = this.fibersFormArray.controls.reduce(
+      (total, control) => total + (control.get('percentage').value || 0),
+      0
+    );
+
+    return totalPercentage === 100;
+  }
+
+  async onSubmit(submitAndAddAnother: boolean = false) {
     this.addFabricForm.disable();
     const val = this.addFabricForm.value;
     const fabric: Partial<Fabric> = {
-      fiber: val.fiber,
       material: val.material,
       pattern: val.pattern,
       color: val.color,
@@ -82,21 +115,37 @@ export class AddFabricComponent {
       source: val.source,
       price: val.price,
       purchaseDate: new Date(val.purchaseDate),
+      lastUpdated: new Date() as unknown as Timestamp,
     };
-    this.fabricService
-      .addFabric(this.userStore.user().id, fabric)
-      .then(() => {
-        this.addFabricForm.enable();
-        this.addFabricForm.reset();
-        if (submitAndAddAnother) {
-          this.router.navigateByUrl('/add-fabric');
-        } else {
-          this.router.navigateByUrl('/stash');
-        }
+
+    // Prepare Fibers array
+    const fibersList: Partial<Fiber>[] = this.fibersFormArray.value.map(
+      (f: Fiber) => ({
+        fiber: f.fiber,
+        percentage: f.percentage,
       })
-      .catch((err) => {
-        console.log(err);
-      });
+    );
+
+    // Call the service method with all three arguments
+    await this.fabricService.addFabric(
+      this.userStore.user().id,
+      fabric,
+      fibersList
+    );
+
+    // Reset form and navigate
+    this.addFabricForm.enable();
+    this.addFabricForm.reset();
+
+    if (submitAndAddAnother) {
+      this.router.navigateByUrl('/add-fabric');
+    } else {
+      this.router.navigateByUrl('/stash');
+    }
+  }
+  catch(err) {
+    console.error('Error adding fabric and fibers:', err);
+    this.addFabricForm.enable(); // Re-enable the form in case of error
   }
 
   onCancel() {

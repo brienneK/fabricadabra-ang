@@ -23,6 +23,8 @@ import { getStorage } from 'firebase/storage';
 import { CheckmarkPipe } from '@shared/pipes/checkmark.pipe';
 import { CurrencyPipe } from '@angular/common';
 import { DatePipe } from '@angular/common';
+import { FiberService } from '@services/fiber.service';
+import { FiberStore } from '@store/fiber.store';
 
 @Component({
   selector: 'app-stash',
@@ -49,10 +51,12 @@ import { DatePipe } from '@angular/common';
 export class StashComponent {
   storage = inject(getStorage);
   fabricService = inject(FabricService);
+  fiberService = inject(FiberService);
   sorter = inject(SortingService);
   router = inject(Router);
   loading = inject(LoadingService);
   stashStore = inject(StashStore);
+  fiberStore = inject(FiberStore);
   userStore = inject(UserStore);
   breakpointObserver = inject(BreakpointObserver);
   fabrics: Signal<Fabric[]> = this.stashStore.stash;
@@ -79,7 +83,7 @@ export class StashComponent {
       .subscribe((result) => {
         if (result.matches) {
           this.columnsToDisplay.set([
-            'fiber',
+            'fibers',
             'material',
             'pattern',
             'color',
@@ -89,7 +93,7 @@ export class StashComponent {
           this.smallScreen.set(true);
         } else {
           this.columnsToDisplay.set([
-            'fiber',
+            'fibers',
             'material',
             'pattern',
             'color',
