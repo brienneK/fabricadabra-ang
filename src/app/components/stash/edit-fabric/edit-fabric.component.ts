@@ -32,6 +32,7 @@ import { DeleteDialogComponent } from '@shared/delete-dialog/delete-dialog.compo
 import { LoadingService } from '@shared/loading/loading.service';
 import { StashStore } from '@store/stash.store';
 import { UserStore } from '@store/user.store';
+import { Timestamp } from 'firebase/firestore';
 
 @Component({
   selector: 'app-edit-fabric',
@@ -176,6 +177,7 @@ export class EditFabricComponent {
       source: val.source,
       price: val.price,
       purchaseDate: val.purchaseDate,
+      lastUpdated: new Date() as unknown as Timestamp,
     };
     let fibers: Partial<Fiber>[] = [];
     this.fibersFormArray.value.forEach((f: any) => {

@@ -10,6 +10,7 @@ import { UserStore } from '@store/user.store';
 import { Fabric } from '@models/fabric.model';
 import { FabricService } from '@services/fabric.service';
 import { getAnalytics } from 'firebase/analytics';
+import { Timestamp } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 import { MatOptionModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -114,6 +115,7 @@ export class AddFabricComponent {
       source: val.source,
       price: val.price,
       purchaseDate: new Date(val.purchaseDate),
+      lastUpdated: new Date() as unknown as Timestamp,
     };
 
     // Prepare Fibers array

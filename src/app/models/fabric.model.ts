@@ -1,10 +1,12 @@
 import { Fiber } from './fiber.model';
+import { Timestamp } from 'firebase/firestore';
 
 export class Fabric {
   constructor(init?: Partial<Fabric>) {
     Object.assign(this, init);
   }
   id: string;
+  lastUpdated: Timestamp;
   fibers: Fiber[];
   material: string;
   pattern: string;
