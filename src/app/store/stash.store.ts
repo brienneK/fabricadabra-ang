@@ -10,10 +10,12 @@ import {
 
 type StashState = {
   stash: Fabric[];
+  loaded: boolean;
 };
 
 const initialState: StashState = {
   stash: [],
+  loaded: false,
 };
 
 export const StashStore = signalStore(
@@ -21,10 +23,10 @@ export const StashStore = signalStore(
   withState(initialState),
   withMethods((store) => ({
     setStash: (stash: Fabric[]) => {
-      patchState(store, { stash: stash });
+      patchState(store, { stash: stash, loaded: true });
     },
     clearStash: () => {
-      patchState(store, { stash: [] });
+      patchState(store, { stash: [], loaded: false });
     },
   })),
   withComputed(({ stash }) => ({

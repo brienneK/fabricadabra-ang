@@ -1,6 +1,16 @@
 <header></header>
 <main>
-  @if (filteredFabrics().length === 0) {
+  @if (!stashStore.loaded()) {
+  <div class="empty-stash">
+    <h2>Loading...</h2>
+    <p>Please wait while we load your stash.</p>
+    <p>
+      Now would be a great time to fix that button you've been meaning to
+      re-attach.
+    </p>
+    <mat-icon>hourglass_top</mat-icon>
+  </div>
+  } @else if (filteredFabrics().length === 0) {
   <div class="empty-stash">
     <h2>Oh no! You don't have any fabrics in your stash yet.</h2>
     <p>Click the button below to begin cataloging your stash.</p>
