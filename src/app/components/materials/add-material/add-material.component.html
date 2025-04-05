@@ -1,0 +1,32 @@
+<h1 mat-dialog-title>Add Material</h1>
+<form [formGroup]="newMaterialForm">
+  <mat-dialog-content class="content">
+    <mat-form-field appearance="fill">
+      <mat-label>Material name</mat-label>
+      <input matInput formControlName="materialName" />
+      @if (f.materialName.errors?.['required']) {
+      <mat-error> *Required </mat-error>
+      }
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button
+      mat-raised-button
+      class="btn-secondary"
+      type="submit"
+      defaultButton
+      [disabled]="!newMaterialForm.valid || newMaterialForm.disabled"
+      (click)="onSubmit()"
+    >
+      Save
+    </button>
+    <button
+      mat-stroked-button
+      type="button"
+      [mat-dialog-close]="false"
+      [disabled]="newMaterialForm.disabled"
+    >
+      Cancel
+    </button>
+  </mat-dialog-actions>
+</form>
