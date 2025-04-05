@@ -10,6 +10,7 @@ import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore';
 import { User } from '@models/user.model';
 import { FabricService } from './fabric.service';
 import { UserStore } from '@store/user.store';
+import { MaterialService } from './material.service';
 
 @Injectable({
   providedIn: 'root',
@@ -21,6 +22,7 @@ export class UserService {
   analytics = inject(getAnalytics);
   router = inject(Router);
   fabricService = inject(FabricService);
+  materialService = inject(MaterialService);
 
   constructor() {
     setPersistence(this.auth, browserLocalPersistence)
@@ -35,7 +37,10 @@ export class UserService {
                   ...userData,
                 });
                 this.userStore.setUser(user);
-                this.fabricService.getFabrics(user.id);
+                this.materialService.getUserMaterials(user.id);
+                await this.fabricService.getFabrics(user.id).then(() => {
+                  this.router.navigateByUrl('/stash');
+                });
               }
             );
             return true;
