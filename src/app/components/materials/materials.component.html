@@ -1,1 +1,18 @@
-<p>materials works!</p>
+<div>
+  <div class="materials-list">
+    @if (filteredMaterials().length > 0) {
+    <ul>
+      @for (material of filteredMaterials(); track material.id) {
+      <li>{{ material.name }}</li>
+      }
+    </ul>
+    } @else {
+    <p class="no-materials">No materials found</p>
+    }
+  </div>
+  <div class="add-button">
+    <button mat-raised-button class="btn-primary" (click)="addMaterial()">
+      Add Material
+    </button>
+  </div>
+</div>

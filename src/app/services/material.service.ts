@@ -27,8 +27,8 @@ export class MaterialService {
   protected readonly sorter = inject(SortingService);
 
   getUserMaterials(userId: string): void {
-    const c = collection(this.fs, `users/${userId}/'materials`);
-    const q = query(c, orderBy('name', 'desc'));
+    const c = collection(this.fs, `users/${userId}/materials`);
+    const q = query(c, orderBy('name', 'asc'));
     onSnapshot(q, (querySnap) => {
       const materials = [
         ...querySnap.docs.map(

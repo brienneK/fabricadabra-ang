@@ -23,6 +23,7 @@ import { Material } from '@models/material.model';
 import { signal, model } from '@angular/core';
 import { computed } from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
+import { AddMaterialComponent } from './add-material/add-material.component';
 
 @Component({
   selector: 'app-materials',
@@ -60,12 +61,7 @@ export class MaterialsComponent {
   nameFilter = model<string>('');
 
   filteredMaterials = computed(() => {
-    var materials = this.#materials().filter((m: Material) => {
-      return (
-        (m.active || m.active === this.activeOnly()) &&
-        m.name.toLowerCase().includes(this.nameFilter().toLowerCase())
-      );
-    });
+    var materials = this.#materials().filter((m: Material) => m.active);
     if (materials.length > 0) {
       materials = this.sorter.sort(materials, this.sortField(), this.sortAsc());
     }
@@ -81,12 +77,12 @@ export class MaterialsComponent {
     const dialogConfig: MatDialogConfig = {
       data: this.currentUser().id,
     };
-    // const dialogRef = this.dialog.open(AddMaterialComponent, dialogConfig);
-    //   dialogRef.afterClosed().subscribe((success) => {
-    //     if (success) {
-    //       this.snackBar.open('Material added', 'OK');
-    //     }
-    //   });
+    const dialogRef = this.dialog.open(AddMaterialComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe((success) => {
+      if (success) {
+        this.snackBar.open('Material added', 'OK');
+      }
+    });
   }
 
   onRowClick(material: Material): void {
