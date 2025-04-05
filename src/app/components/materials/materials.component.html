@@ -1,9 +1,16 @@
 <div>
+  <div class="active-toggle">
+    <mat-slide-toggle #activeToggle [checked]="true" [(ngModel)]="activeOnly">
+      Active only
+    </mat-slide-toggle>
+  </div>
   <div class="materials-list">
     @if (filteredMaterials().length > 0) {
     <ul>
       @for (material of filteredMaterials(); track material.id) {
-      <li>{{ material.name }}</li>
+      <li>
+        <a (click)="onClick(material)">{{ material.name }}</a>
+      </li>
       }
     </ul>
     } @else {

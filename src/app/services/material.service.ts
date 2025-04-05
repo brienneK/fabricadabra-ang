@@ -56,7 +56,7 @@ export class MaterialService {
     materialId: string,
     changes: Partial<Material>
   ): Promise<any> {
-    const c = collection(this.fs, `users/${userId}/materials/${materialId}`);
+    const c = collection(this.fs, `users/${userId}/materials/`);
     const q = query(
       c,
       where('name', '==', changes.name),
@@ -75,7 +75,7 @@ export class MaterialService {
   }
 
   async deleteMaterial(userId: string, materialId: string): Promise<any> {
-    const c = collection(this.fs, `users/${userId}/materials/${materialId}`);
+    const c = collection(this.fs, `users/${userId}/materials`);
     const q = query(c, where(documentId(), '==', materialId));
     return await getDocs(q).then(async (querySnap) => {
       if (!querySnap.empty) {

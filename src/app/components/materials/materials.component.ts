@@ -24,6 +24,7 @@ import { signal, model } from '@angular/core';
 import { computed } from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { AddMaterialComponent } from './add-material/add-material.component';
+import { EditMaterialComponent } from './edit-material/edit-material.component';
 
 @Component({
   selector: 'app-materials',
@@ -61,7 +62,9 @@ export class MaterialsComponent {
   nameFilter = model<string>('');
 
   filteredMaterials = computed(() => {
-    var materials = this.#materials().filter((m: Material) => m.active);
+    var materials = this.#materials().filter(
+      (m: Material) => m.active || m.active == this.activeOnly()
+    );
     if (materials.length > 0) {
       materials = this.sorter.sort(materials, this.sortField(), this.sortAsc());
     }
@@ -85,16 +88,16 @@ export class MaterialsComponent {
     });
   }
 
-  onRowClick(material: Material): void {
+  onClick(material: Material): void {
     const dialogConfig: MatDialogConfig = {
       data: { material: material, userId: this.currentUser().id },
     };
-    // const dialogRef = this.dialog.open(EditMaterialComponent, dialogConfig);
-    //   dialogRef.afterClosed().subscribe((result) => {
-    //     if (result.success) {
-    //       this.snackBar.open(`Material ${result.operation}`, 'OK');
-    //     }
-    //   });
+    const dialogRef = this.dialog.open(EditMaterialComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result.success) {
+        this.snackBar.open(`Material ${result.operation}`, 'OK');
+      }
+    });
   }
 
   showHelp(): void {
