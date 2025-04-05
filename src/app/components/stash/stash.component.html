@@ -1,6 +1,11 @@
 <header></header>
 <main>
-  @if (filteredFabrics().length === 0) {
+  @if (!dataLoaded()) {
+  <div class="loading-container">
+    <mat-spinner></mat-spinner>
+    <p>Loading your fabric stash...</p>
+  </div>
+  } @else if (filteredFabrics().length === 0) {
   <div class="empty-stash">
     <h2>Oh no! You don't have any fabrics in your stash yet.</h2>
     <p>Click the button below to begin cataloging your stash.</p>
@@ -38,7 +43,7 @@
             <div class="fiber-list">
               @for (fiber of fabric.fibers; track fiber.id) {
               <div class="fiber-item">
-                {{ fiber.fiber }} - {{ fiber.percentage }}%
+                {{ fiber.percentage }}% {{ fiber.fiber }}
               </div>
               } @empty {
               <span class="no-fibers">No fibers specified</span>

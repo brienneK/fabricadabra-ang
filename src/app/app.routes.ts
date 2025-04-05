@@ -14,6 +14,9 @@ import { authGuard, loggedInGuard } from '@components/auth/guards.guard';
 import { EditFabricComponent } from '@components/stash/edit-fabric/edit-fabric.component';
 import { Fabric } from '@models/fabric.model';
 import { editFabricResolver } from '@components/stash/edit-fabric/edit-fabric.resolver';
+import { stashResolver } from '@components/stash/stash.resolver';
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 export const routes: Routes = [
   {
@@ -51,6 +54,7 @@ export const routes: Routes = [
     path: 'stash',
     title: 'Stash',
     component: StashComponent,
+    resolve: { fabrics: stashResolver },
     canActivate: [authGuard],
   },
   {
@@ -79,3 +83,9 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
 ];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule],
+})
+export class AppRoutingModule {}
