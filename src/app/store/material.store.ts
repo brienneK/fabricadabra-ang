@@ -16,7 +16,7 @@ const initialState: MaterialState = {
   userMaterials: [],
 };
 
-export const materialStore = signalStore(
+export const MaterialStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
   withMethods((store) => ({

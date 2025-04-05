@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Material } from '@models/material.model';
 import { MaterialServiceInterface } from './material.service.interface';
-import { materialStore } from '@store/material.store';
+import { MaterialStore } from '@store/material.store';
 import { SortingService } from './sorting.service';
 import {
   addDoc,
@@ -22,7 +22,7 @@ import {
   providedIn: 'root',
 })
 export class MaterialService {
-  protected readonly materialStore = inject(materialStore);
+  protected readonly materialStore = inject(MaterialStore);
   protected readonly fs = inject(getFirestore);
   protected readonly sorter = inject(SortingService);
 
