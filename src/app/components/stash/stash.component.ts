@@ -1,5 +1,5 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { signal, effect } from '@angular/core';
+import { signal } from '@angular/core';
 import { Component, computed, inject, Signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,7 +12,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSort, Sort, MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { Router, RouterLink, ActivatedRoute } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { LoadingService } from '@shared/loading/loading.service';
 import { Fabric } from '@models/fabric.model';
 import { FabricService } from '@services/fabric.service';
@@ -57,7 +57,6 @@ export class StashComponent {
   sorter = inject(SortingService);
   router = inject(Router);
   loading = inject(LoadingService);
-  dataLoaded = signal<boolean>(false);
   stashStore = inject(StashStore);
   fiberStore = inject(FiberStore);
   userStore = inject(UserStore);
@@ -69,23 +68,8 @@ export class StashComponent {
   columnsToDisplay = signal<string[]>([]);
   smallScreen = signal<boolean>(false);
 
-  constructor(private route: ActivatedRoute) {
-    // This effect will run whenever the stash data changes
-    effect(() => {
-      const stash = this.fabrics();
-      // If we have data (either empty array or with items), mark as loaded
-      if (Array.isArray(stash)) {
-        this.dataLoaded.set(true);
-      }
-    });
-  }
-
   // Modified computed property that ensures we don't filter until data is loaded
   filteredFabrics = computed(() => {
-    if (!this.dataLoaded()) {
-      return [];
-    }
-
     const stash = this.fabrics();
     if (stash.length === 0) {
       return [];
