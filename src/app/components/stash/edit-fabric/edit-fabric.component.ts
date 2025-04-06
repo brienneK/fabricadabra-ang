@@ -1,6 +1,7 @@
 import { signal } from '@angular/core';
 import { ElementRef } from '@angular/core';
 import { viewChild } from '@angular/core';
+import { Signal } from '@angular/core';
 import { inject } from '@angular/core';
 import { Component } from '@angular/core';
 import { FormGroup } from '@angular/forms';
@@ -24,12 +25,15 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Fabric } from '@models/fabric.model';
 import { Fiber } from '@models/fiber.model';
+import { Material } from '@models/material.model';
 import { FabricService } from '@services/fabric.service';
 import { DeleteDialogComponent } from '@shared/delete-dialog/delete-dialog.component';
 import { LoadingService } from '@shared/loading/loading.service';
+import { MaterialStore } from '@store/material.store';
 import { StashStore } from '@store/stash.store';
 import { UserStore } from '@store/user.store';
 import { Timestamp } from 'firebase/firestore';
@@ -47,6 +51,7 @@ import { Timestamp } from 'firebase/firestore';
     MatCheckbox,
     MatDatepickerModule,
     MatDialogModule,
+    MatSelectModule,
   ],
   templateUrl: './edit-fabric.component.html',
   styleUrl: './edit-fabric.component.scss',
@@ -59,8 +64,10 @@ export class EditFabricComponent {
   protected readonly dialog = inject(MatDialog);
   protected readonly stashStore = inject(StashStore);
   protected readonly fabricService = inject(FabricService);
+  protected readonly materialStore = inject(MaterialStore);
   protected readonly userStore = inject(UserStore);
   datePicker = viewChild<ElementRef>('datePicker');
+  materials: Signal<Material[]> = this.materialStore.userMaterials;
 
   fabric = signal<Fabric>(null);
 
@@ -129,7 +136,7 @@ export class EditFabricComponent {
     if (fabric) {
       this.fabric.set(fabric);
       this.editFabricForm.patchValue({
-        material: fabric.material,
+        material: fabric.materialRef.id,
         pattern: fabric.pattern,
         color: fabric.color,
         width: fabric.width,
@@ -187,7 +194,7 @@ export class EditFabricComponent {
       fibers.push(fiber);
     });
     this.fabricService
-      .updateFabric(userId, changes, fibers)
+      .updateFabric(userId, changes, fibers, val.material)
       .then(() => {
         this.router.navigate(['/stash']);
       })

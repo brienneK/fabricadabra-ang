@@ -120,10 +120,16 @@ export class FabricService {
   async updateFabric(
     userId: string,
     fabric: Partial<Fabric>,
-    fibers: Partial<Fiber>[]
+    fibers: Partial<Fiber>[],
+    materialId: string
   ): Promise<any> {
     // Create a batch to handle fabric and fibers atomically
     const batch = writeBatch(this.fs);
+    const materialDocRef = doc(
+      this.fs,
+      `users/${userId}/materials/${materialId}`
+    );
+    fabric.materialRef = materialDocRef; // Set the material reference in the fabric object
     const fabricDocRef = doc(this.fs, `users/${userId}/fabrics/${fabric.id}`);
     batch.update(fabricDocRef, fabric);
     const fibersCollection = collection(fabricDocRef, 'fibers');

@@ -55,7 +55,11 @@
       <div class="fabric-details">
         <mat-form-field>
           <mat-label>Material</mat-label>
-          <input matInput type="text" formControlName="material" />
+          <mat-select formControlName="material">
+            @for (material of materials(); track material.id) {
+            <mat-option [value]="material.id">{{ material.name }}</mat-option>
+            }
+          </mat-select>
           @if (f.material?.errors?.required) {
           <mat-error>Material is required.</mat-error>
           }
