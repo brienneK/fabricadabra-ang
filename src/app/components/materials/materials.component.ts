@@ -25,6 +25,8 @@ import { computed } from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { AddMaterialComponent } from './add-material/add-material.component';
 import { EditMaterialComponent } from './edit-material/edit-material.component';
+import { MatListModule } from '@angular/material/list';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-materials',
@@ -38,6 +40,8 @@ import { EditMaterialComponent } from './edit-material/edit-material.component';
     MatSlideToggleModule,
     MatTableModule,
     MatSortModule,
+    MatListModule,
+    MatExpansionModule,
     ActiveInactivePipe,
   ],
   templateUrl: './materials.component.html',
@@ -51,6 +55,7 @@ export class MaterialsComponent {
   protected readonly dialog = inject(MatDialog);
   protected readonly loading = inject(LoadingService);
   protected readonly snackBar = inject(MatSnackBar);
+  protected readonly panelOpenState = signal(false);
 
   currentUser: Signal<User> = this.userStore.user;
   #materials: Signal<Material[]> = this.materialStore.userMaterials;

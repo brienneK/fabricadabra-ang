@@ -1,25 +1,37 @@
-<div>
-  <div class="active-toggle">
-    <mat-slide-toggle #activeToggle [checked]="true" [(ngModel)]="activeOnly">
-      Active only
-    </mat-slide-toggle>
-  </div>
-  <div class="materials-list">
-    @if (filteredMaterials().length > 0) {
-    <ul>
-      @for (material of filteredMaterials(); track material.id) {
-      <li>
-        <a (click)="onClick(material)">{{ material.name }}</a>
-      </li>
+<mat-accordion>
+  <mat-expansion-panel
+    (opened)="panelOpenState.set(true)"
+    (closed)="panelOpenState.set(false)"
+  >
+    <mat-expansion-panel-header>
+      <h3>Materials</h3>
+    </mat-expansion-panel-header>
+    <div class="materials-list">
+      @if (filteredMaterials().length > 0) {
+      <div class="options-container">
+        @for (material of filteredMaterials(); track material.id) {
+        <button mat-list-item class="option-item" (click)="onClick(material)">
+          {{ material.name }}
+        </button>
+        }
+      </div>
+      } @else {
+      <p class="no-materials">No materials found</p>
       }
-    </ul>
-    } @else {
-    <p class="no-materials">No materials found</p>
-    }
-  </div>
-  <div class="add-button">
-    <button mat-raised-button class="btn-primary" (click)="addMaterial()">
-      Add Material
-    </button>
-  </div>
-</div>
+    </div>
+    <div>
+      <div class="materials-actions">
+        <mat-slide-toggle
+          #activeToggle
+          [checked]="true"
+          [(ngModel)]="activeOnly"
+        >
+          Active only
+        </mat-slide-toggle>
+        <button mat-raised-button class="btn-primary" (click)="addMaterial()">
+          Add Material
+        </button>
+      </div>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>

@@ -40,14 +40,20 @@ main {
   padding-left: 25px;
 }
 
+a.options-link {
+  text-decoration: none;
+  color: mat.get-theme-color(theme.$light-theme, primary, 50) !important;
+}
+
 a:hover {
   cursor: pointer;
+  color: mat.get-theme-color(theme.$light-theme, secondary, 70) !important;
 }
 
 .container {
   position: relative;
   display: grid;
-  justify-items: center;
+  margin-top: 2rem;
 }
 
 .mat-toolbar,
