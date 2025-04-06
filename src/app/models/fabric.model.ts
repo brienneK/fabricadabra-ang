@@ -1,5 +1,5 @@
 import { Fiber } from './fiber.model';
-import { Timestamp } from 'firebase/firestore';
+import { DocumentReference, Timestamp } from 'firebase/firestore';
 
 export class Fabric {
   constructor(init?: Partial<Fabric>) {
@@ -8,7 +8,7 @@ export class Fabric {
   id: string;
   lastUpdated: Timestamp;
   fibers: Fiber[];
-  material: string;
+  materialRef: DocumentReference;
   pattern: string;
   color: string;
   width: number;

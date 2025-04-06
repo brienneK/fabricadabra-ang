@@ -168,7 +168,6 @@ export class EditFabricComponent {
     const val = this.editFabricForm.value;
     const changes: Partial<Fabric> = {
       id: fabricId,
-      material: val.material,
       pattern: val.pattern,
       color: val.color,
       width: val.width,

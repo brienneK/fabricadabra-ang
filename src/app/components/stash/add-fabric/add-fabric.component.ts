@@ -25,6 +25,10 @@ import { viewChild } from '@angular/core';
 import { ElementRef } from '@angular/core';
 import { Fiber } from '@models/fiber.model';
 import { FormArray } from '@angular/forms';
+import { MaterialStore } from '@store/material.store';
+import { Material } from '@models/material.model';
+import { Signal } from '@angular/core';
+import { MatSelectChange } from '@angular/material/select';
 
 @Component({
   selector: 'app-add-fabric',
@@ -46,13 +50,16 @@ import { FormArray } from '@angular/forms';
   styleUrl: './add-fabric.component.scss',
 })
 export class AddFabricComponent {
-  storage = inject(getStorage);
-  analytics = inject(getAnalytics);
-  fb = inject(FormBuilder);
-  fabricService = inject(FabricService);
-  userStore = inject(UserStore);
+  protected readonly storage = inject(getStorage);
+  protected readonly analytics = inject(getAnalytics);
+  protected readonly fb = inject(FormBuilder);
+  protected readonly fabricService = inject(FabricService);
+  protected readonly userStore = inject(UserStore);
+  protected readonly materialStore = inject(MaterialStore);
   protected readonly router = inject(Router);
+
   datePicker = viewChild<ElementRef>('datePicker');
+  materials: Signal<Material[]> = this.materialStore.userMaterials;
 
   addFabricForm = this.fb.group({
     fibers: this.fb.array([], [Validators.required, Validators.minLength(1)]),
@@ -102,11 +109,14 @@ export class AddFabricComponent {
     return totalPercentage === 100;
   }
 
+  onMaterialChange(event: MatSelectChange) {
+    const val = this.addFabricForm.value;
+  }
+
   async onSubmit(submitAndAddAnother: boolean = false) {
     this.addFabricForm.disable();
     const val = this.addFabricForm.value;
     const fabric: Partial<Fabric> = {
-      material: val.material,
       pattern: val.pattern,
       color: val.color,
       width: val.width,
@@ -130,7 +140,8 @@ export class AddFabricComponent {
     await this.fabricService.addFabric(
       this.userStore.user().id,
       fabric,
-      fibersList
+      fibersList,
+      val.material
     );
 
     // Reset form and navigate
