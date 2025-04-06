@@ -42,7 +42,6 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatSortModule,
     MatListModule,
     MatExpansionModule,
-    ActiveInactivePipe,
   ],
   templateUrl: './materials.component.html',
   styleUrl: './materials.component.scss',
