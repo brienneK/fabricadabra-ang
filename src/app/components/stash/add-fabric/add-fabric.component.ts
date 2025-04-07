@@ -33,6 +33,8 @@ import { FabricPattern } from '@models/fabric-pattern.model';
 import { FabricPatternStore } from '@store/fabric-pattern.store';
 import { Source } from '@models/source.model';
 import { SourceStore } from '@store/source.store';
+import { ColorStore } from '@store/color.store';
+import { Color } from '@models/color.model';
 
 @Component({
   selector: 'app-add-fabric',
@@ -61,6 +63,7 @@ export class AddFabricComponent {
   protected readonly userStore = inject(UserStore);
   protected readonly materialStore = inject(MaterialStore);
   protected readonly fabricPatternStore = inject(FabricPatternStore);
+  protected readonly colorStore = inject(ColorStore);
   protected readonly sourceStore = inject(SourceStore);
   protected readonly router = inject(Router);
 
@@ -68,6 +71,7 @@ export class AddFabricComponent {
   materials: Signal<Material[]> = this.materialStore.userMaterials;
   fabricPatterns: Signal<FabricPattern[]> =
     this.fabricPatternStore.userFabricPatterns;
+  colors: Signal<Color[]> = this.colorStore.userColors;
   sources: Signal<Source[]> = this.sourceStore.userSources;
 
   addFabricForm = this.fb.group({
@@ -126,7 +130,6 @@ export class AddFabricComponent {
     this.addFabricForm.disable();
     const val = this.addFabricForm.value;
     const fabric: Partial<Fabric> = {
-      color: val.color,
       width: val.width,
       length: val.length,
       scrap: val.scrap,
@@ -150,6 +153,7 @@ export class AddFabricComponent {
       fibersList,
       val.material,
       val.fabricPattern,
+      val.color,
       val.source
     );
 

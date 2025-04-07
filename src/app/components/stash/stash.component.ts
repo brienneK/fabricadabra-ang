@@ -32,6 +32,8 @@ import { FabricPattern } from '@models/fabric-pattern.model';
 import { FabricPatternStore } from '@store/fabric-pattern.store';
 import { Source } from '@models/source.model';
 import { SourceStore } from '@store/source.store';
+import { ColorStore } from '@store/color.store';
+import { Color } from '@models/color.model';
 
 @Component({
   selector: 'app-stash',
@@ -68,12 +70,14 @@ export class StashComponent {
   userStore = inject(UserStore);
   materialStore = inject(MaterialStore);
   fabricPatternStore = inject(FabricPatternStore);
+  colorStore = inject(ColorStore);
   sourceStore = inject(SourceStore);
   breakpointObserver = inject(BreakpointObserver);
   fabrics: Signal<Fabric[]> = this.stashStore.stash;
   materials: Signal<Material[]> = this.materialStore.userMaterials;
   fabricPatterns: Signal<FabricPattern[]> =
     this.fabricPatternStore.userFabricPatterns;
+  colors: Signal<Color[]> = this.colorStore.userColors;
   sources: Signal<Source[]> = this.sourceStore.userSources;
 
   sortField = signal<string>('');
@@ -133,6 +137,11 @@ export class StashComponent {
   getFabricPatternName(fabricPatternId: string): string {
     const pattern = this.fabricPatterns().find((p) => p.id === fabricPatternId);
     return pattern?.name ?? 'Unknown Pattern';
+  }
+
+  getColorName(colorId: string): string {
+    const color = this.colors().find((c) => c.id === colorId);
+    return color?.name ?? 'Unknown Color';
   }
 
   getSourceName(sourceId: string): string {

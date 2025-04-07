@@ -10,7 +10,7 @@ export class Fabric {
   fibers: Fiber[];
   materialRef: DocumentReference;
   fabricPatternRef: DocumentReference;
-  color: string;
+  colorRef: DocumentReference;
   width: number;
   length: number;
   scrap: boolean;

@@ -27,6 +27,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Color } from '@models/color.model';
 import { FabricPattern } from '@models/fabric-pattern.model';
 import { Fabric } from '@models/fabric.model';
 import { Fiber } from '@models/fiber.model';
@@ -35,6 +36,7 @@ import { Source } from '@models/source.model';
 import { FabricService } from '@services/fabric.service';
 import { DeleteDialogComponent } from '@shared/delete-dialog/delete-dialog.component';
 import { LoadingService } from '@shared/loading/loading.service';
+import { ColorStore } from '@store/color.store';
 import { FabricPatternStore } from '@store/fabric-pattern.store';
 import { MaterialStore } from '@store/material.store';
 import { SourceStore } from '@store/source.store';
@@ -70,12 +72,14 @@ export class EditFabricComponent {
   protected readonly fabricService = inject(FabricService);
   protected readonly materialStore = inject(MaterialStore);
   protected readonly fabricPatternStore = inject(FabricPatternStore);
+  protected readonly colorStore = inject(ColorStore);
   protected readonly sourceStore = inject(SourceStore);
   protected readonly userStore = inject(UserStore);
   datePicker = viewChild<ElementRef>('datePicker');
   materials: Signal<Material[]> = this.materialStore.userMaterials;
   fabricPatterns: Signal<FabricPattern[]> =
     this.fabricPatternStore.userFabricPatterns;
+  colors: Signal<Color[]> = this.colorStore.userColors;
   sources: Signal<Source[]> = this.sourceStore.userSources;
   fabric = signal<Fabric>(null);
 
@@ -146,7 +150,7 @@ export class EditFabricComponent {
       this.editFabricForm.patchValue({
         material: fabric.materialRef.id,
         fabricPattern: fabric.fabricPatternRef.id,
-        color: fabric.color,
+        color: fabric.colorRef.id,
         width: fabric.width,
         length: fabric.length,
         scrap: fabric.scrap,
@@ -183,7 +187,6 @@ export class EditFabricComponent {
     const val = this.editFabricForm.value;
     const changes: Partial<Fabric> = {
       id: fabricId,
-      color: val.color,
       width: val.width,
       length: val.length,
       scrap: val.scrap,
@@ -206,6 +209,7 @@ export class EditFabricComponent {
         fibers,
         val.material,
         val.fabricPattern,
+        val.color,
         val.source
       )
       .then(() => {

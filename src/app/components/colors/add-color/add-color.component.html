@@ -1,0 +1,32 @@
+<h1 mat-dialog-title>Add Color</h1>
+<form [formGroup]="newColorForm">
+  <mat-dialog-content class="content">
+    <mat-form-field appearance="fill">
+      <mat-label>Color name</mat-label>
+      <input matInput formControlName="colorName" />
+      @if (f.colorName.errors?.['required']) {
+      <mat-error> *Required </mat-error>
+      }
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button
+      mat-raised-button
+      class="btn-secondary"
+      type="submit"
+      defaultButton
+      [disabled]="!newColorForm.valid || newColorForm.disabled"
+      (click)="onSubmit()"
+    >
+      Save
+    </button>
+    <button
+      mat-stroked-button
+      type="button"
+      [mat-dialog-close]="false"
+      [disabled]="newColorForm.disabled"
+    >
+      Cancel
+    </button>
+  </mat-dialog-actions>
+</form>
