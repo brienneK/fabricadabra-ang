@@ -26,6 +26,8 @@ import { DatePipe } from '@angular/common';
 import { FiberService } from '@services/fiber.service';
 import { FiberStore } from '@store/fiber.store';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MaterialStore } from '@store/material.store';
+import { Material } from '@models/material.model';
 
 @Component({
   selector: 'app-stash',
@@ -60,8 +62,10 @@ export class StashComponent {
   stashStore = inject(StashStore);
   fiberStore = inject(FiberStore);
   userStore = inject(UserStore);
+  materialStore = inject(MaterialStore);
   breakpointObserver = inject(BreakpointObserver);
   fabrics: Signal<Fabric[]> = this.stashStore.stash;
+  materials: Signal<Material[]> = this.materialStore.userMaterials;
 
   sortField = signal<string>('');
   sortAsc = signal<boolean>(true);
@@ -110,6 +114,11 @@ export class StashComponent {
           this.smallScreen.set(false);
         }
       });
+  }
+
+  getMaterialName(materialId: string): string {
+    const material = this.materials().find((m) => m.id === materialId);
+    return material?.name ?? 'Unknown Material';
   }
 
   sortFabrics(e: { active: string; direction: string }): void {
