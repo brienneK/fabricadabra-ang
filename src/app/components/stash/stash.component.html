@@ -88,7 +88,9 @@
         </ng-container>
         <ng-container matColumnDef="source">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Source</th>
-          <td mat-cell *matCellDef="let fabric">{{ fabric.source }}</td>
+          <td mat-cell *matCellDef="let fabric">
+            {{ getSourceName(fabric.sourceRef.id) }}
+          </td>
         </ng-container>
         <ng-container matColumnDef="price">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Price</th>

@@ -31,6 +31,8 @@ import { Signal } from '@angular/core';
 import { MatSelectChange } from '@angular/material/select';
 import { FabricPattern } from '@models/fabric-pattern.model';
 import { FabricPatternStore } from '@store/fabric-pattern.store';
+import { Source } from '@models/source.model';
+import { SourceStore } from '@store/source.store';
 
 @Component({
   selector: 'app-add-fabric',
@@ -59,12 +61,14 @@ export class AddFabricComponent {
   protected readonly userStore = inject(UserStore);
   protected readonly materialStore = inject(MaterialStore);
   protected readonly fabricPatternStore = inject(FabricPatternStore);
+  protected readonly sourceStore = inject(SourceStore);
   protected readonly router = inject(Router);
 
   datePicker = viewChild<ElementRef>('datePicker');
   materials: Signal<Material[]> = this.materialStore.userMaterials;
   fabricPatterns: Signal<FabricPattern[]> =
     this.fabricPatternStore.userFabricPatterns;
+  sources: Signal<Source[]> = this.sourceStore.userSources;
 
   addFabricForm = this.fb.group({
     fibers: this.fb.array([], [Validators.required, Validators.minLength(1)]),
@@ -126,7 +130,6 @@ export class AddFabricComponent {
       width: val.width,
       length: val.length,
       scrap: val.scrap,
-      source: val.source,
       price: val.price,
       purchaseDate: new Date(val.purchaseDate),
       lastUpdated: new Date() as unknown as Timestamp,
@@ -146,7 +149,8 @@ export class AddFabricComponent {
       fabric,
       fibersList,
       val.material,
-      val.fabricPattern
+      val.fabricPattern,
+      val.source
     );
 
     // Reset form and navigate

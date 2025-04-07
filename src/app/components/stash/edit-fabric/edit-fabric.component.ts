@@ -31,11 +31,13 @@ import { FabricPattern } from '@models/fabric-pattern.model';
 import { Fabric } from '@models/fabric.model';
 import { Fiber } from '@models/fiber.model';
 import { Material } from '@models/material.model';
+import { Source } from '@models/source.model';
 import { FabricService } from '@services/fabric.service';
 import { DeleteDialogComponent } from '@shared/delete-dialog/delete-dialog.component';
 import { LoadingService } from '@shared/loading/loading.service';
 import { FabricPatternStore } from '@store/fabric-pattern.store';
 import { MaterialStore } from '@store/material.store';
+import { SourceStore } from '@store/source.store';
 import { StashStore } from '@store/stash.store';
 import { UserStore } from '@store/user.store';
 import { Timestamp } from 'firebase/firestore';
@@ -68,11 +70,13 @@ export class EditFabricComponent {
   protected readonly fabricService = inject(FabricService);
   protected readonly materialStore = inject(MaterialStore);
   protected readonly fabricPatternStore = inject(FabricPatternStore);
+  protected readonly sourceStore = inject(SourceStore);
   protected readonly userStore = inject(UserStore);
   datePicker = viewChild<ElementRef>('datePicker');
   materials: Signal<Material[]> = this.materialStore.userMaterials;
   fabricPatterns: Signal<FabricPattern[]> =
     this.fabricPatternStore.userFabricPatterns;
+  sources: Signal<Source[]> = this.sourceStore.userSources;
   fabric = signal<Fabric>(null);
 
   editFabricForm = this.fb.group({
@@ -146,7 +150,7 @@ export class EditFabricComponent {
         width: fabric.width,
         length: fabric.length,
         scrap: fabric.scrap,
-        source: fabric.source,
+        source: fabric.sourceRef.id,
         price: fabric.price,
         purchaseDate: fabric.purchaseDate.toDate(),
       });
@@ -183,7 +187,6 @@ export class EditFabricComponent {
       width: val.width,
       length: val.length,
       scrap: val.scrap,
-      source: val.source,
       price: val.price,
       purchaseDate: val.purchaseDate,
       lastUpdated: new Date() as unknown as Timestamp,
@@ -197,7 +200,14 @@ export class EditFabricComponent {
       fibers.push(fiber);
     });
     this.fabricService
-      .updateFabric(userId, changes, fibers, val.material, val.fabricPattern)
+      .updateFabric(
+        userId,
+        changes,
+        fibers,
+        val.material,
+        val.fabricPattern,
+        val.source
+      )
       .then(() => {
         this.router.navigate(['/stash']);
       })

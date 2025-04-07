@@ -103,7 +103,11 @@
         >
         <mat-form-field>
           <mat-label>Source</mat-label>
-          <input matInput type="text" formControlName="source" />
+          <mat-select formControlName="source">
+            @for (source of sources(); track source.id) {
+            <mat-option [value]="source.id">{{ source.name }}</mat-option>
+            }
+          </mat-select>
         </mat-form-field>
         <mat-form-field>
           <mat-label>Purchase date</mat-label>
