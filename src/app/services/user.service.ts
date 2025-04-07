@@ -12,6 +12,7 @@ import { FabricService } from './fabric.service';
 import { UserStore } from '@store/user.store';
 import { MaterialService } from './material.service';
 import { FabricPatternService } from './fabric-pattern.service';
+import { SourceService } from './source.service';
 
 @Injectable({
   providedIn: 'root',
@@ -25,6 +26,7 @@ export class UserService {
   fabricService = inject(FabricService);
   materialService = inject(MaterialService);
   fabricPatternService = inject(FabricPatternService);
+  sourceService = inject(SourceService);
 
   constructor() {
     setPersistence(this.auth, browserLocalPersistence)
@@ -41,6 +43,7 @@ export class UserService {
                 this.userStore.setUser(user);
                 this.materialService.getUserMaterials(user.id);
                 this.fabricPatternService.getUserFabricPatterns(user.id);
+                this.sourceService.getUserSources(user.id);
                 await this.fabricService.getFabrics(user.id).then(() => {
                   this.router.navigateByUrl('/stash');
                 });

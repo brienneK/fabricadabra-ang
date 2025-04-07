@@ -14,7 +14,7 @@ export class Fabric {
   width: number;
   length: number;
   scrap: boolean;
-  source: string;
+  sourceRef: DocumentReference;
   price: number;
   purchaseDate: Date;
   public get yardage(): number {

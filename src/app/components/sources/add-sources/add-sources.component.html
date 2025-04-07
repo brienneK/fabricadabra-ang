@@ -1,0 +1,32 @@
+<h1 mat-dialog-title>Add Source</h1>
+<form [formGroup]="newSourceForm">
+  <mat-dialog-content class="content">
+    <mat-form-field appearance="fill">
+      <mat-label>Source name</mat-label>
+      <input matInput formControlName="sourceName" />
+      @if (f.sourceName.errors?.['required']) {
+      <mat-error> *Required </mat-error>
+      }
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button
+      mat-raised-button
+      class="btn-secondary"
+      type="submit"
+      defaultButton
+      [disabled]="!newSourceForm.valid || newSourceForm.disabled"
+      (click)="onSubmit()"
+    >
+      Save
+    </button>
+    <button
+      mat-stroked-button
+      type="button"
+      [mat-dialog-close]="false"
+      [disabled]="newSourceForm.disabled"
+    >
+      Cancel
+    </button>
+  </mat-dialog-actions>
+</form>
