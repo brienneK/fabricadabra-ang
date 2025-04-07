@@ -90,7 +90,7 @@ export class FabricService {
     fibers: Partial<Fiber>[],
     materialId: string,
     fabricPatternId: string,
-    colorId: string,
+    colorIds: string[],
     sourceId: string
   ): Promise<any> {
     // Create a batch to handle fabric and fibers atomically
@@ -105,8 +105,14 @@ export class FabricService {
       `users/${userId}/fabricPatterns/${fabricPatternId}`
     );
     fabric.fabricPatternRef = fabricPatternDocRef; // Set the pattern reference in the fabric object
-    const colorDocRef = doc(this.fs, `users/${userId}/colors/${colorId}`);
-    fabric.colorRef = colorDocRef; // Set the color reference in the fabric object
+    // Fix for color references - make sure each is a document reference, not collection
+    if (colorIds && colorIds.length > 0) {
+      fabric.colorRefs = colorIds.map((colorId) =>
+        doc(this.fs, `users/${userId}/colors/${colorId}`)
+      );
+    } else {
+      fabric.colorRefs = []; // Initialize as empty array if no colors
+    }
     const sourceDocRef = doc(this.fs, `users/${userId}/sources/${sourceId}`);
     fabric.sourceRef = sourceDocRef; // Set the source reference in the fabric object
     const fabricsCollection = collection(this.fs, `users/${userId}/fabrics`);
@@ -135,7 +141,7 @@ export class FabricService {
     fibers: Partial<Fiber>[],
     materialId: string,
     fabricPatternId: string,
-    colorId: string,
+    colorIds: string[],
     sourceId: string
   ): Promise<any> {
     // Create a batch to handle fabric and fibers atomically
@@ -150,8 +156,14 @@ export class FabricService {
       `users/${userId}/fabricPatterns/${fabricPatternId}`
     );
     fabric.fabricPatternRef = fabricPatternDocRef; // Set the pattern reference in the fabric object
-    const colorDocRef = doc(this.fs, `users/${userId}/colors/${colorId}`);
-    fabric.colorRef = colorDocRef; // Set the color reference in the fabric object
+    // Fix for color references - make sure each is a document reference, not collection
+    if (colorIds && colorIds.length > 0) {
+      fabric.colorRefs = colorIds.map((colorId) =>
+        doc(this.fs, `users/${userId}/colors/${colorId}`)
+      );
+    } else {
+      fabric.colorRefs = []; // Initialize as empty array if no colors
+    }
     const sourceDocRef = doc(this.fs, `users/${userId}/sources/${sourceId}`);
     fabric.sourceRef = sourceDocRef; // Set the source reference in the fabric object
     const fabricDocRef = doc(this.fs, `users/${userId}/fabrics/${fabric.id}`);

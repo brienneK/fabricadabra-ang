@@ -1,3 +1,4 @@
+import { Color } from './color.model';
 import { Fiber } from './fiber.model';
 import { DocumentReference, Timestamp } from 'firebase/firestore';
 
@@ -10,7 +11,7 @@ export class Fabric {
   fibers: Fiber[];
   materialRef: DocumentReference;
   fabricPatternRef: DocumentReference;
-  colorRef: DocumentReference;
+  colorRefs: DocumentReference<any>[];
   width: number;
   length: number;
   scrap: boolean;

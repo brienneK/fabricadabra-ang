@@ -42,7 +42,7 @@ import { MaterialStore } from '@store/material.store';
 import { SourceStore } from '@store/source.store';
 import { StashStore } from '@store/stash.store';
 import { UserStore } from '@store/user.store';
-import { Timestamp } from 'firebase/firestore';
+import { DocumentReference, Timestamp } from 'firebase/firestore';
 
 @Component({
   selector: 'app-edit-fabric',
@@ -94,7 +94,7 @@ export class EditFabricComponent {
     ),
     material: [''],
     fabricPattern: [''],
-    color: [''],
+    colors: [['']],
     width: [0],
     length: [0],
     scrap: [false],
@@ -150,7 +150,7 @@ export class EditFabricComponent {
       this.editFabricForm.patchValue({
         material: fabric.materialRef.id,
         fabricPattern: fabric.fabricPatternRef.id,
-        color: fabric.colorRef.id,
+        colors: fabric.colorRefs.map((ref) => ref.id),
         width: fabric.width,
         length: fabric.length,
         scrap: fabric.scrap,
@@ -209,7 +209,7 @@ export class EditFabricComponent {
         fibers,
         val.material,
         val.fabricPattern,
-        val.color,
+        val.colors as string[],
         val.source
       )
       .then(() => {

@@ -34,6 +34,7 @@ import { Source } from '@models/source.model';
 import { SourceStore } from '@store/source.store';
 import { ColorStore } from '@store/color.store';
 import { Color } from '@models/color.model';
+import { DocumentReference } from 'firebase/firestore';
 
 @Component({
   selector: 'app-stash',
@@ -106,7 +107,7 @@ export class StashComponent {
             'fibers',
             'material',
             'pattern',
-            'color',
+            'colors',
             'width',
             'length',
           ]);
@@ -116,7 +117,7 @@ export class StashComponent {
             'fibers',
             'material',
             'pattern',
-            'color',
+            'colors',
             'width',
             'length',
             'scrap',
@@ -139,9 +140,32 @@ export class StashComponent {
     return pattern?.name ?? 'Unknown Pattern';
   }
 
-  getColorName(colorId: string): string {
+  getSingleColorName(colorId: string): string {
     const color = this.colors().find((c) => c.id === colorId);
-    return color?.name ?? 'Unknown Color';
+    return color?.name ?? 'Unknown';
+  }
+  // Get color name by ID
+  getColorName(colorRefs: DocumentReference[]): string {
+    switch (colorRefs.length) {
+      case 1:
+        return this.getSingleColorName(colorRefs[0].id);
+      case 2:
+        return `${this.getSingleColorName(
+          colorRefs[0].id
+        )} & ${this.getSingleColorName(colorRefs[1].id)}`;
+      default:
+        // For 3+ colors, create a comma-delimited list
+        return colorRefs
+          .map((ref, index) => {
+            const colorName = this.getSingleColorName(ref.id);
+            // Add "& " before the last item
+            if (index === colorRefs.length - 1) {
+              return `& ${colorName}`;
+            }
+            return colorName;
+          })
+          .join(', ');
+    }
   }
 
   getSourceName(sourceId: string): string {

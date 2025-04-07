@@ -78,7 +78,7 @@ export class AddFabricComponent {
     fibers: this.fb.array([], [Validators.required, Validators.minLength(1)]),
     material: ['', [Validators.required]],
     fabricPattern: ['', [Validators.required]],
-    color: ['', [Validators.required]],
+    colors: [[], Validators.required],
     width: [0, [Validators.required]],
     length: [0, [Validators.required]],
     scrap: [false],
@@ -153,7 +153,7 @@ export class AddFabricComponent {
       fibersList,
       val.material,
       val.fabricPattern,
-      val.color,
+      val.colors,
       val.source
     );
 
