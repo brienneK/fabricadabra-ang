@@ -1,37 +1,49 @@
-<mat-accordion>
-  <mat-expansion-panel
-    (opened)="panelOpenState.set(true)"
-    (closed)="panelOpenState.set(false)"
-  >
-    <mat-expansion-panel-header>
-      <h3>Colors</h3>
-    </mat-expansion-panel-header>
-    <div class="colors-list">
-      @if (filteredColors().length > 0) {
-      <div class="options-container">
-        @for (color of filteredColors(); track color.id) {
-        <button mat-list-item class="option-item" (click)="onClick(color)">
-          {{ color.name }}
-        </button>
+<h1 mat-dialog-title>Edit Color</h1>
+<form [formGroup]="editColorForm">
+  <mat-dialog-content>
+    <div class="content">
+      <mat-form-field appearance="fill">
+        <mat-label>Color name</mat-label>
+        <input matInput formControlName="colorName" />
+        @if (f.colorName.errors?.['required']) {
+        <mat-error> *Required </mat-error>
         }
-      </div>
-      } @else {
-      <p class="no-colors">No colors found</p>
-      }
+      </mat-form-field>
     </div>
-    <div>
-      <div class="colors-actions">
-        <mat-slide-toggle
-          #activeToggle
-          [checked]="true"
-          [(ngModel)]="activeOnly"
-        >
-          Active only
-        </mat-slide-toggle>
-        <button mat-raised-button class="btn-primary" (click)="addColor()">
-          Add Color
-        </button>
-      </div>
+    <div class="toggle">
+      <mat-slide-toggle formControlName="active">Active</mat-slide-toggle>
     </div>
-  </mat-expansion-panel>
-</mat-accordion>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button
+      mat-stroked-button
+      type="button"
+      class="btn-cancel"
+      [disabled]="editColorForm.disabled"
+      [mat-dialog-close]="{ success: false }"
+    >
+      Cancel
+    </button>
+    <button
+      mat-raised-button
+      type="button"
+      class="btn-delete"
+      [disabled]="editColorForm.disabled"
+      (click)="deleteColor()"
+    >
+      Delete
+    </button>
+    <button
+      mat-raised-button
+      class="btn-primary"
+      type="submit"
+      defaultButton
+      [disabled]="
+        !editColorForm.valid || editColorForm.pristine || editColorForm.disabled
+      "
+      (click)="onSubmit()"
+    >
+      Save
+    </button>
+  </mat-dialog-actions>
+</form>
