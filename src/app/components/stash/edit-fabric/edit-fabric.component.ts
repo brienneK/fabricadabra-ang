@@ -27,12 +27,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { Router, ActivatedRoute } from '@angular/router';
+import { FabricPattern } from '@models/fabric-pattern.model';
 import { Fabric } from '@models/fabric.model';
 import { Fiber } from '@models/fiber.model';
 import { Material } from '@models/material.model';
 import { FabricService } from '@services/fabric.service';
 import { DeleteDialogComponent } from '@shared/delete-dialog/delete-dialog.component';
 import { LoadingService } from '@shared/loading/loading.service';
+import { FabricPatternStore } from '@store/fabric-pattern.store';
 import { MaterialStore } from '@store/material.store';
 import { StashStore } from '@store/stash.store';
 import { UserStore } from '@store/user.store';
@@ -65,10 +67,12 @@ export class EditFabricComponent {
   protected readonly stashStore = inject(StashStore);
   protected readonly fabricService = inject(FabricService);
   protected readonly materialStore = inject(MaterialStore);
+  protected readonly fabricPatternStore = inject(FabricPatternStore);
   protected readonly userStore = inject(UserStore);
   datePicker = viewChild<ElementRef>('datePicker');
   materials: Signal<Material[]> = this.materialStore.userMaterials;
-
+  fabricPatterns: Signal<FabricPattern[]> =
+    this.fabricPatternStore.userFabricPatterns;
   fabric = signal<Fabric>(null);
 
   editFabricForm = this.fb.group({
@@ -81,7 +85,7 @@ export class EditFabricComponent {
       ]
     ),
     material: [''],
-    pattern: [''],
+    fabricPattern: [''],
     color: [''],
     width: [0],
     length: [0],
@@ -137,7 +141,7 @@ export class EditFabricComponent {
       this.fabric.set(fabric);
       this.editFabricForm.patchValue({
         material: fabric.materialRef.id,
-        pattern: fabric.pattern,
+        fabricPattern: fabric.fabricPatternRef.id,
         color: fabric.color,
         width: fabric.width,
         length: fabric.length,
@@ -175,7 +179,6 @@ export class EditFabricComponent {
     const val = this.editFabricForm.value;
     const changes: Partial<Fabric> = {
       id: fabricId,
-      pattern: val.pattern,
       color: val.color,
       width: val.width,
       length: val.length,
@@ -194,7 +197,7 @@ export class EditFabricComponent {
       fibers.push(fiber);
     });
     this.fabricService
-      .updateFabric(userId, changes, fibers, val.material)
+      .updateFabric(userId, changes, fibers, val.material, val.fabricPattern)
       .then(() => {
         this.router.navigate(['/stash']);
       })

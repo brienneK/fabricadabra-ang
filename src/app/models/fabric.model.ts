@@ -9,7 +9,7 @@ export class Fabric {
   lastUpdated: Timestamp;
   fibers: Fiber[];
   materialRef: DocumentReference;
-  pattern: string;
+  fabricPatternRef: DocumentReference;
   color: string;
   width: number;
   length: number;

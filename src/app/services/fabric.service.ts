@@ -88,7 +88,8 @@ export class FabricService {
     userId: string,
     fabric: Partial<Fabric>,
     fibers: Partial<Fiber>[],
-    materialId: string
+    materialId: string,
+    fabricPatternId: string
   ): Promise<any> {
     // Create a batch to handle fabric and fibers atomically
     const batch = writeBatch(this.fs);
@@ -97,6 +98,11 @@ export class FabricService {
       `users/${userId}/materials/${materialId}`
     );
     fabric.materialRef = materialDocRef; // Set the material reference in the fabric object
+    const fabricPatternDocRef = doc(
+      this.fs,
+      `users/${userId}/fabricPatterns/${fabricPatternId}`
+    );
+    fabric.fabricPatternRef = fabricPatternDocRef; // Set the pattern reference in the fabric object
     const fabricsCollection = collection(this.fs, `users/${userId}/fabrics`);
     const fabricDocRef = doc(fabricsCollection);
     batch.set(fabricDocRef, fabric);
@@ -121,7 +127,8 @@ export class FabricService {
     userId: string,
     fabric: Partial<Fabric>,
     fibers: Partial<Fiber>[],
-    materialId: string
+    materialId: string,
+    fabricPatternId: string
   ): Promise<any> {
     // Create a batch to handle fabric and fibers atomically
     const batch = writeBatch(this.fs);
@@ -130,6 +137,11 @@ export class FabricService {
       `users/${userId}/materials/${materialId}`
     );
     fabric.materialRef = materialDocRef; // Set the material reference in the fabric object
+    const fabricPatternDocRef = doc(
+      this.fs,
+      `users/${userId}/fabricPatterns/${fabricPatternId}`
+    );
+    fabric.fabricPatternRef = fabricPatternDocRef; // Set the pattern reference in the fabric object
     const fabricDocRef = doc(this.fs, `users/${userId}/fabrics/${fabric.id}`);
     batch.update(fabricDocRef, fabric);
     const fibersCollection = collection(fabricDocRef, 'fibers');

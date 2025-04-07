@@ -1,0 +1,46 @@
+<mat-accordion>
+  <mat-expansion-panel
+    (opened)="panelOpenState.set(true)"
+    (closed)="panelOpenState.set(false)"
+  >
+    <mat-expansion-panel-header>
+      <h3>Fabric Patterns</h3>
+    </mat-expansion-panel-header>
+    <div class="fabricPatterns-list">
+      @if (filteredFabricPatterns().length > 0) {
+      <div class="options-container">
+        @for (fabricPattern of filteredFabricPatterns(); track fabricPattern.id)
+        {
+        <button
+          mat-list-item
+          class="option-item"
+          (click)="onClick(fabricPattern)"
+        >
+          {{ fabricPattern.name }}
+        </button>
+        }
+      </div>
+      } @else {
+      <p class="no-fabricPatterns">No fabric patterns found</p>
+      }
+    </div>
+    <div>
+      <div class="fabricPatterns-actions">
+        <mat-slide-toggle
+          #activeToggle
+          [checked]="true"
+          [(ngModel)]="activeOnly"
+        >
+          Active only
+        </mat-slide-toggle>
+        <button
+          mat-raised-button
+          class="btn-primary"
+          (click)="addFabricPattern()"
+        >
+          Add Fabric Pattern
+        </button>
+      </div>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>

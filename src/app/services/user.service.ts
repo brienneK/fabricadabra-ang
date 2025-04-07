@@ -11,6 +11,7 @@ import { User } from '@models/user.model';
 import { FabricService } from './fabric.service';
 import { UserStore } from '@store/user.store';
 import { MaterialService } from './material.service';
+import { FabricPatternService } from './fabric-pattern.service';
 
 @Injectable({
   providedIn: 'root',
@@ -23,6 +24,7 @@ export class UserService {
   router = inject(Router);
   fabricService = inject(FabricService);
   materialService = inject(MaterialService);
+  fabricPatternService = inject(FabricPatternService);
 
   constructor() {
     setPersistence(this.auth, browserLocalPersistence)
@@ -38,6 +40,7 @@ export class UserService {
                 });
                 this.userStore.setUser(user);
                 this.materialService.getUserMaterials(user.id);
+                this.fabricPatternService.getUserFabricPatterns(user.id);
                 await this.fabricService.getFabrics(user.id).then(() => {
                   this.router.navigateByUrl('/stash');
                 });
@@ -63,7 +66,6 @@ export class UserService {
       return new User(docSnap.data());
     }
     // @TODO Create a batch to handle new user creation.
-    // @TODO Add default options (fibers, materials, etc.) in other services.
     return null;
   }
 

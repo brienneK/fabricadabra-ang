@@ -1,0 +1,51 @@
+<h1 mat-dialog-title>Edit FabricPattern</h1>
+<form [formGroup]="editFabricPatternForm">
+  <mat-dialog-content>
+    <div class="content">
+      <mat-form-field appearance="fill">
+        <mat-label>FabricPattern name</mat-label>
+        <input matInput formControlName="fabricPatternName" />
+        @if (f.fabricPatternName.errors?.['required']) {
+        <mat-error> *Required </mat-error>
+        }
+      </mat-form-field>
+    </div>
+    <div class="toggle">
+      <mat-slide-toggle formControlName="active">Active</mat-slide-toggle>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button
+      mat-stroked-button
+      type="button"
+      class="btn-cancel"
+      [disabled]="editFabricPatternForm.disabled"
+      [mat-dialog-close]="{ success: false }"
+    >
+      Cancel
+    </button>
+    <button
+      mat-raised-button
+      type="button"
+      class="btn-delete"
+      [disabled]="editFabricPatternForm.disabled"
+      (click)="deleteFabricPattern()"
+    >
+      Delete
+    </button>
+    <button
+      mat-raised-button
+      class="btn-primary"
+      type="submit"
+      defaultButton
+      [disabled]="
+        !editFabricPatternForm.valid ||
+        editFabricPatternForm.pristine ||
+        editFabricPatternForm.disabled
+      "
+      (click)="onSubmit()"
+    >
+      Save
+    </button>
+  </mat-dialog-actions>
+</form>

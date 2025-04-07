@@ -1,0 +1,32 @@
+<h1 mat-dialog-title>Add Fabric Pattern</h1>
+<form [formGroup]="newFabricPatternForm">
+  <mat-dialog-content class="content">
+    <mat-form-field appearance="fill">
+      <mat-label>FabricPattern name</mat-label>
+      <input matInput formControlName="fabricPatternName" />
+      @if (f.fabricPatternName.errors?.['required']) {
+      <mat-error> *Required </mat-error>
+      }
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button
+      mat-raised-button
+      class="btn-secondary"
+      type="submit"
+      defaultButton
+      [disabled]="!newFabricPatternForm.valid || newFabricPatternForm.disabled"
+      (click)="onSubmit()"
+    >
+      Save
+    </button>
+    <button
+      mat-stroked-button
+      type="button"
+      [mat-dialog-close]="false"
+      [disabled]="newFabricPatternForm.disabled"
+    >
+      Cancel
+    </button>
+  </mat-dialog-actions>
+</form>

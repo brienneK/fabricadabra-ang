@@ -29,6 +29,8 @@ import { MaterialStore } from '@store/material.store';
 import { Material } from '@models/material.model';
 import { Signal } from '@angular/core';
 import { MatSelectChange } from '@angular/material/select';
+import { FabricPattern } from '@models/fabric-pattern.model';
+import { FabricPatternStore } from '@store/fabric-pattern.store';
 
 @Component({
   selector: 'app-add-fabric',
@@ -56,15 +58,18 @@ export class AddFabricComponent {
   protected readonly fabricService = inject(FabricService);
   protected readonly userStore = inject(UserStore);
   protected readonly materialStore = inject(MaterialStore);
+  protected readonly fabricPatternStore = inject(FabricPatternStore);
   protected readonly router = inject(Router);
 
   datePicker = viewChild<ElementRef>('datePicker');
   materials: Signal<Material[]> = this.materialStore.userMaterials;
+  fabricPatterns: Signal<FabricPattern[]> =
+    this.fabricPatternStore.userFabricPatterns;
 
   addFabricForm = this.fb.group({
     fibers: this.fb.array([], [Validators.required, Validators.minLength(1)]),
     material: ['', [Validators.required]],
-    pattern: ['', [Validators.required]],
+    fabricPattern: ['', [Validators.required]],
     color: ['', [Validators.required]],
     width: [0, [Validators.required]],
     length: [0, [Validators.required]],
@@ -117,7 +122,6 @@ export class AddFabricComponent {
     this.addFabricForm.disable();
     const val = this.addFabricForm.value;
     const fabric: Partial<Fabric> = {
-      pattern: val.pattern,
       color: val.color,
       width: val.width,
       length: val.length,
@@ -141,7 +145,8 @@ export class AddFabricComponent {
       this.userStore.user().id,
       fabric,
       fibersList,
-      val.material
+      val.material,
+      val.fabricPattern
     );
 
     // Reset form and navigate
