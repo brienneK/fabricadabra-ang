@@ -1,1 +1,49 @@
-<p>edit-fibers works!</p>
+<h1 mat-dialog-title>Edit Fiber</h1>
+<form [formGroup]="editFiberForm">
+  <mat-dialog-content>
+    <div class="content">
+      <mat-form-field appearance="fill">
+        <mat-label>Fiber name</mat-label>
+        <input matInput formControlName="fiberName" />
+        @if (f.fiberName.errors?.['required']) {
+        <mat-error> *Required </mat-error>
+        }
+      </mat-form-field>
+    </div>
+    <div class="toggle">
+      <mat-slide-toggle formControlName="active">Active</mat-slide-toggle>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button
+      mat-stroked-button
+      type="button"
+      class="btn-cancel"
+      [disabled]="editFiberForm.disabled"
+      [mat-dialog-close]="{ success: false }"
+    >
+      Cancel
+    </button>
+    <button
+      mat-raised-button
+      type="button"
+      class="btn-delete"
+      [disabled]="editFiberForm.disabled"
+      (click)="deleteUserFiber()"
+    >
+      Delete
+    </button>
+    <button
+      mat-raised-button
+      class="btn-primary"
+      type="submit"
+      defaultButton
+      [disabled]="
+        !editFiberForm.valid || editFiberForm.pristine || editFiberForm.disabled
+      "
+      (click)="onSubmit()"
+    >
+      Save
+    </button>
+  </mat-dialog-actions>
+</form>

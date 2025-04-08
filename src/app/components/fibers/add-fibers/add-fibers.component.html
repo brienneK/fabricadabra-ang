@@ -1,1 +1,32 @@
-<p>add-fibers works!</p>
+<h1 mat-dialog-title>Add Fiber</h1>
+<form [formGroup]="newFiberForm">
+  <mat-dialog-content class="content">
+    <mat-form-field appearance="fill">
+      <mat-label>Fiber name</mat-label>
+      <input matInput formControlName="fiberName" />
+      @if (f.fiberName.errors?.['required']) {
+      <mat-error> *Required </mat-error>
+      }
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button
+      mat-raised-button
+      class="btn-secondary"
+      type="submit"
+      defaultButton
+      [disabled]="!newFiberForm.valid || newFiberForm.disabled"
+      (click)="onSubmit()"
+    >
+      Save
+    </button>
+    <button
+      mat-stroked-button
+      type="button"
+      [mat-dialog-close]="false"
+      [disabled]="newFiberForm.disabled"
+    >
+      Cancel
+    </button>
+  </mat-dialog-actions>
+</form>

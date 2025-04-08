@@ -3,24 +3,29 @@ import { Injectable } from '@angular/core';
 import { Fiber } from '@models/fiber.model';
 import { FiberStore } from '@store/fiber.store';
 import {
-  collection,
-  doc,
-  getDoc,
   addDoc,
-  updateDoc,
+  collection,
+  deleteDoc,
+  doc,
+  documentId,
+  getDoc,
+  getDocs,
   getFirestore,
   onSnapshot,
-  query,
   orderBy,
-  deleteDoc,
+  query,
+  updateDoc,
+  where,
 } from 'firebase/firestore';
+import { SortingService } from './sorting.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FiberService {
-  fs = inject(getFirestore);
-  fiberStore = inject(FiberStore);
+  protected readonly fs = inject(getFirestore);
+  protected readonly fiberStore = inject(FiberStore);
+  protected readonly sorter = inject(SortingService);
 
   getFibers(userId: string, fabricId: string): void {
     const c = collection(this.fs, `users/${userId}/fabrics/${fabricId}/fibers`);
@@ -29,7 +34,7 @@ export class FiberService {
       const fibers = [
         ...snapshot.docs.map((doc) => new Fiber({ id: doc.id, ...doc.data() })),
       ];
-      this.fiberStore.setFibers(fibers);
+      this.fiberStore.setUserFibers(fibers);
     });
   }
 
@@ -81,5 +86,67 @@ export class FiberService {
       `users/${userId}/fabrics/${fabricId}/fibers/${fiberId}`
     );
     return await deleteDoc(d);
+  }
+
+  getUserFibers(userId: string): void {
+    const c = collection(this.fs, `users/${userId}/fibers`);
+    const q = query(c, orderBy('name', 'asc'));
+    onSnapshot(q, (querySnap) => {
+      const fibers = [
+        ...querySnap.docs.map(
+          (doc) => new Fiber({ ...doc.data(), id: doc.id })
+        ),
+      ];
+      this.fiberStore.setUserFibers(fibers);
+    });
+  }
+
+  async addUserFiber(userId: string, fiber: Partial<Fiber>): Promise<any> {
+    const c = collection(this.fs, `users/${userId}/fibers`);
+    const q = query(c, where('name', '==', fiber.fiber));
+    return await getDocs(q).then(async (querySnap) => {
+      if (querySnap.empty) {
+        return await addDoc(c, fiber);
+      } else {
+        throw new Error('Fiber already exists');
+      }
+    });
+  }
+
+  async updateUserFiber(
+    userId: string,
+    fiberId: string,
+    changes: Partial<Fiber>
+  ): Promise<any> {
+    const c = collection(this.fs, `users/${userId}/fibers/`);
+    const q = query(
+      c,
+      where('name', '==', changes.fiber),
+      where(documentId(), '!=', fiberId)
+    );
+    return await getDocs(q).then(async (querySnap) => {
+      if (querySnap.empty) {
+        return await updateDoc(
+          doc(this.fs, `users/${userId}/fibers/${fiberId}`),
+          changes
+        );
+      } else {
+        throw new Error('Fiber already exists');
+      }
+    });
+  }
+
+  async deleteUserFiber(userId: string, fiberId: string): Promise<any> {
+    const c = collection(this.fs, `users/${userId}/fibers`);
+    const q = query(c, where(documentId(), '==', fiberId));
+    return await getDocs(q).then(async (querySnap) => {
+      if (!querySnap.empty) {
+        return await deleteDoc(doc(c, fiberId));
+      } else {
+        throw new Error(
+          'This fiber is assigned to one or more fabrics and cannot be deleted.'
+        );
+      }
+    });
   }
 }

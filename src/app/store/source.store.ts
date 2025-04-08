@@ -28,6 +28,6 @@ export const SourceStore = signalStore(
     },
   })),
   withComputed(({ userSources }) => ({
-    activeUserSources: computed(() => userSources().filter((m) => m.active)),
+    activeUserSources: computed(() => userSources().filter((s) => s.active)),
   }))
 );

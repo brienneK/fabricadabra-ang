@@ -1,1 +1,37 @@
-<p>fibers works!</p>
+<mat-accordion>
+  <mat-expansion-panel
+    (opened)="panelOpenState.set(true)"
+    (closed)="panelOpenState.set(false)"
+  >
+    <mat-expansion-panel-header>
+      <h3>Fibers</h3>
+    </mat-expansion-panel-header>
+    <div class="fibers-list">
+      @if (filteredFibers().length > 0) {
+      <div class="options-container">
+        @for (fiber of filteredFibers(); track fiber.id) {
+        <button mat-list-item class="option-item" (click)="onClick(fiber)">
+          {{ fiber.fiber }}
+        </button>
+        }
+      </div>
+      } @else {
+      <p class="no-fibers">No fibers found</p>
+      }
+    </div>
+    <div>
+      <div class="fibers-actions">
+        <mat-slide-toggle
+          #activeToggle
+          [checked]="true"
+          [(ngModel)]="activeOnly"
+        >
+          Active only
+        </mat-slide-toggle>
+        <button mat-raised-button class="btn-primary" (click)="addUserFiber()">
+          Add Fiber
+        </button>
+      </div>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>

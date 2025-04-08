@@ -1,23 +1,28 @@
+import { computed } from '@angular/core';
 import { Fiber } from '@models/fiber.model';
+import { withComputed } from '@ngrx/signals';
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 
 type FiberState = {
-  fibers: Fiber[];
+  userFibers: Fiber[];
 };
 
 const initialState: FiberState = {
-  fibers: [],
+  userFibers: [],
 };
 
 export const FiberStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
   withMethods((store) => ({
-    setFibers: (Fibers: Fiber[]) => {
-      patchState(store, { fibers: Fibers });
+    setUserFibers: (Fibers: Fiber[]) => {
+      patchState(store, { userFibers: Fibers });
     },
-    clearFibers: () => {
-      patchState(store, { fibers: [] });
+    clearUserFibers: () => {
+      patchState(store, { userFibers: [] });
     },
+  })),
+  withComputed(({ userFibers }) => ({
+    activeUserFibers: computed(() => userFibers().filter((f) => f.active)),
   }))
 );
