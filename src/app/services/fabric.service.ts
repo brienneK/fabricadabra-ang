@@ -113,8 +113,10 @@ export class FabricService {
     } else {
       fabric.colorRefs = []; // Initialize as empty array if no colors
     }
-    const sourceDocRef = doc(this.fs, `users/${userId}/sources/${sourceId}`);
-    fabric.sourceRef = sourceDocRef; // Set the source reference in the fabric object
+    if (sourceId) {
+      const sourceDocRef = doc(this.fs, `users/${userId}/sources/${sourceId}`);
+      fabric.sourceRef = sourceDocRef; // Set the source reference in the fabric object
+    }
     const fabricsCollection = collection(this.fs, `users/${userId}/fabrics`);
     const fabricDocRef = doc(fabricsCollection);
     batch.set(fabricDocRef, fabric);
