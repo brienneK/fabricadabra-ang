@@ -5,4 +5,5 @@ export class Fiber {
   id: string;
   fiber: string;
   percentage: number;
+  active: boolean;
 }
