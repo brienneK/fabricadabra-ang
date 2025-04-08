@@ -9,7 +9,11 @@
           <div [formGroupName]="i" class="fiber-entry">
             <mat-form-field>
               <mat-label>Fiber</mat-label>
-              <input matInput formControlName="fiber" required />
+              <mat-select formControlName="fiber">
+                @for (fiber of fibers; track fiber.id) {
+                <mat-option [value]="fiber.id">{{ fiber.fiber }}</mat-option>
+                }
+              </mat-select>
               @if (fiberControl.get('fiber')?.errors?.required) {
               <mat-error>Fiber is required.</mat-error>
               }

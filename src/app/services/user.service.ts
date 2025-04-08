@@ -14,6 +14,7 @@ import { MaterialService } from './material.service';
 import { FabricPatternService } from './fabric-pattern.service';
 import { SourceService } from './source.service';
 import { ColorService } from './color.service';
+import { FiberService } from './fiber.service';
 @Injectable({
   providedIn: 'root',
 })
@@ -24,6 +25,7 @@ export class UserService {
   analytics = inject(getAnalytics);
   router = inject(Router);
   fabricService = inject(FabricService);
+  fiberService = inject(FiberService);
   materialService = inject(MaterialService);
   fabricPatternService = inject(FabricPatternService);
   colorService = inject(ColorService);
@@ -42,6 +44,7 @@ export class UserService {
                   ...userData,
                 });
                 this.userStore.setUser(user);
+                this.fiberService.getUserFibers(user.id);
                 this.materialService.getUserMaterials(user.id);
                 this.fabricPatternService.getUserFabricPatterns(user.id);
                 this.colorService.getUserColors(user.id);

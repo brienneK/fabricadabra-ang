@@ -62,7 +62,7 @@ export class ColorsComponent {
 
   filteredColors = computed(() => {
     var colors = this.#colors().filter(
-      (m: Color) => m.active || m.active == this.activeOnly()
+      (c: Color) => c.active || c.active == this.activeOnly()
     );
     if (colors.length > 0) {
       colors = this.sorter.sort(colors, this.sortField(), this.sortAsc());
